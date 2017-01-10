@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\HSM">
+      <UniqueIdentifier>{4fbf1e03-492f-4a4a-a5c9-6e0cc52cc2c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\HSM">
+      <UniqueIdentifier>{2df0a1b2-1302-473d-bdd3-b85267e3aa96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Main">
+      <UniqueIdentifier>{14df17e4-3348-480a-8a21-0fcbcbdd62b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Main">
+      <UniqueIdentifier>{53aeb6f5-b6d2-4ba1-aacd-ee914a9079da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\States">
+      <UniqueIdentifier>{40393712-8006-476d-8b74-c2a190667425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States">
+      <UniqueIdentifier>{e9860f8b-32ef-4b0d-a61b-30b0d0d51d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{255f1ae5-ca5e-42da-bafa-493bf4d332bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{f5dd72f7-0bd1-4183-b67f-74906c773651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\InputProcessor">
+      <UniqueIdentifier>{e77e6a49-af0a-42f3-86ab-42fce51eec7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\InputProcessor">
+      <UniqueIdentifier>{53bae4e0-0285-4fe7-af9b-25fbfdc8d536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Cut">
+      <UniqueIdentifier>{300ba022-5700-4e72-a0bd-d58c46468d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Cut">
+      <UniqueIdentifier>{691ced51-9301-47b7-8b61-3efa07e8ac92}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HSM\EventBase.h">
+      <Filter>Header Files\HSM</Filter>
+    </ClInclude>
+    <ClInclude Include="HSM\EventListener.h">
+      <Filter>Header Files\HSM</Filter>
+    </ClInclude>
+    <ClInclude Include="HSM\EventWin32.h">
+      <Filter>Header Files\HSM</Filter>
+    </ClInclude>
+    <ClInclude Include="HSM\ObjectBase.h">
+      <Filter>Header Files\HSM</Filter>
+    </ClInclude>
+    <ClInclude Include="HSM\ObjectCommand.h">
+      <Filter>Header Files\HSM</Filter>
+    </ClInclude>
+    <ClInclude Include="HSM\ObjectStock.h">
+      <Filter>Header Files\HSM</Filter>
+    </ClInclude>
+    <ClInclude Include="HSM\StateBase.h">
+      <Filter>Header Files\HSM</Filter>
+    </ClInclude>
+    <ClInclude Include="HSM\StateMachineManager.h">
+      <Filter>Header Files\HSM</Filter>
+    </ClInclude>
+    <ClInclude Include="XFEM.h">
+      <Filter>Header Files\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="SOnGame.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="SMain.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DXBasicPainter.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DXManager.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\FX.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ImageBMP.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Matrix4D.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Mesh.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\MeshMathSurface.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionEvent.h">
+      <Filter>Header Files\InputProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="Cut\Cutter.h">
+      <Filter>Header Files\Cut</Filter>
+    </ClInclude>
+    <ClInclude Include="Cut\Plane.h">
+      <Filter>Header Files\Cut</Filter>
+    </ClInclude>
+    <ClInclude Include="Cut\VMesh.h">
+      <Filter>Header Files\Cut</Filter>
+    </ClInclude>
+    <ClInclude Include="Cut\VolumeMesh.h">
+      <Filter>Header Files\Cut</Filter>
+    </ClInclude>
+    <ClInclude Include="Cut\VolumeMeshGenericID.h">
+      <Filter>Header Files\Cut</Filter>
+    </ClInclude>
+    <ClInclude Include="InputProcessor.h">
+      <Filter>Header Files\InputProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\InputProcessor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HSM\EventBase.cpp">
+      <Filter>Source Files\HSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HSM\EventListener.cpp">
+      <Filter>Source Files\HSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HSM\EventWin32.cpp">
+      <Filter>Source Files\HSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HSM\ObjectBase.cpp">
+      <Filter>Source Files\HSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HSM\ObjectCommand.cpp">
+      <Filter>Source Files\HSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HSM\ObjectStock.cpp">
+      <Filter>Source Files\HSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HSM\StateBase.cpp">
+      <Filter>Source Files\HSM</Filter>
+    </ClCompile>
+    <ClCompile Include="HSM\StateMachineManager.cpp">
+      <Filter>Source Files\HSM</Filter>
+    </ClCompile>
+    <ClCompile Include="XFEM.cpp">
+      <Filter>Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="SMain.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="SOnGame.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DXBasicPainter.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\DXManager.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\FX.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\ImageBMP.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Matrix4D.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Mesh.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\MeshMathSurface.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionEvent.cpp">
+      <Filter>Source Files\InputProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="Cut\Cutter.cpp">
+      <Filter>Source Files\Cut</Filter>
+    </ClCompile>
+    <ClCompile Include="Cut\Plane.cpp">
+      <Filter>Source Files\Cut</Filter>
+    </ClCompile>
+    <ClCompile Include="Cut\VMesh.cpp">
+      <Filter>Source Files\Cut</Filter>
+    </ClCompile>
+    <ClCompile Include="InputProcessor.cpp">
+      <Filter>Source Files\InputProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source Files\InputProcessor</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="XFEM.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="XFEM.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
