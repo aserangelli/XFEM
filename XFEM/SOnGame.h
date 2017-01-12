@@ -38,8 +38,8 @@ public:
 	/* Collisions */
 	unsigned long m_lFlags;
 
-	unsigned long m_lMoveSphere1;
-	unsigned long m_lMoveSphere2;
+	//unsigned long m_lMoveSphere1;
+	//unsigned long m_lMoveSphere2;
 	/* Flags move object */
 #define MOVE_OBJECT 0x01
 #define MOVE_UP     0x02
@@ -67,11 +67,8 @@ public:
 	MATRIX4D m_Projection;
 
 	/* Scene */
-	CMeshMathSurface m_Surface;
-	//vector<CMesh> m_Scene;
+	CVMesh m_TetrahedralCube;
 
-	CVMesh MiVariable;
-	//vector<BVH> m_BVHs;
 
 	bool flag = true;
 

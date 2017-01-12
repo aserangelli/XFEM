@@ -34,7 +34,7 @@ class CVMesh :
 private:
 	vector<TetrahedronEdgeInfo> m_EdgeInfo;
 	vector<unsigned long> m_IndicesTetrahedrosBuffer;
-	map<long long int, VECTOR4D> m_VerticesTetrahedron;
+	map<long long int, VECTOR4D> m_TetraVertexPos;
 	map<long long int, TetrahedronFigure> m_TetrahedronFigures;
 	long long int totalNodes;
 	long long int totalTetrahedron;
@@ -42,7 +42,7 @@ public:
 	bool asd = true;
 	CVMesh();
 	~CVMesh();
-	void LoadMSHFile(char * filename);
+	void LoadMSHFile();
 	void CutTetrahedron(CDXBasicPainter* m_pDXPainter);
 	long long GetTotalEdges() { return m_EdgeInfo.size(); }
 	vector<CDXBasicPainter::VERTEX>& GetVertices() { return m_Vertices; }

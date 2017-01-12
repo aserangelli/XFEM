@@ -49,10 +49,7 @@ void CSOnGame::OnEntry(void)
 	m_World = Identity();
 
 	/* Load surface */
-	m_Surface.LoadSuzanne();
-	//m_Surface.Optimize();
-	m_Surface.BuildTangentSpaceFromTexCoordsIndexed(true);
-	m_Surface.SetColor(White, White, White, White);
+	m_TetrahedralCube.LoadMSHFile();
 
 	/* Load Scene */
 	char buffer[BUF_SIZE];
@@ -198,9 +195,6 @@ void CSOnGame::OnEntry(void)
 	m_bForward =  m_bBackward = m_bTurnLeft = m_bTurnRight =
 	m_bTurnUp =  m_bTurnDown = m_bTurnS =  m_bTurnS1 =false;
 
-	MiVariable.LoadMSHFile("torus.msh");
-
-
 
 
 }
@@ -279,9 +273,7 @@ unsigned long CSOnGame::OnEvent(CEventBase * pEvent)
 			m_lIndicesFrame[1] = 1;
 			m_lIndicesFrame[2] = 2;
 
-			MiVariable.CutTetrahedron(m_pDXPainter);
-
-			MiVariable.LoadMSHFile("torus.msh");
+			m_TetrahedralCube.CutTetrahedron(m_pDXPainter);
 
 			// Draw
 			// Actualizar camara si fue movida
@@ -320,7 +312,7 @@ unsigned long CSOnGame::OnEvent(CEventBase * pEvent)
 			//m_pDXManager->GetContext()->RSSetState(m_pDXPainter->GetDrawLHRState());
 
 			/* Draw surface */
-			m_pDXPainter->DrawIndexed(&MiVariable.m_Vertices[0], MiVariable.m_Vertices.size(), &MiVariable.m_Indices[0], MiVariable.m_Indices.size(), m_nFlagsPainter);
+			m_pDXPainter->DrawIndexed(&m_TetrahedralCube.m_Vertices[0], m_TetrahedralCube.m_Vertices.size(), &m_TetrahedralCube.m_Indices[0], m_TetrahedralCube.m_Indices.size(), m_nFlagsPainter);
 
 			m_pDXManager->GetSwapChain()->Present(1, 0);
 
@@ -566,11 +558,11 @@ void CSOnGame::ManageKeyboardEvents(UINT event, WPARAM wParam)
 				break;
 			case VK_1:
 			case VK_4:
-				m_lMoveSphere1 = 0;
+				//m_lMoveSphere1 = 0;
 				break;
 			case VK_2:
 			case VK_5:
-				m_lMoveSphere2 = 0;
+				//m_lMoveSphere2 = 0;
 				break;
 			/*case VK_1:
 				m_bMoveSphere1 = false;
@@ -625,16 +617,16 @@ void CSOnGame::ManageKeyboardEvents(UINT event, WPARAM wParam)
 				m_bTurnS1 = true;
 				break;
 			case VK_1:
-				m_lMoveSphere1 = MOVE_OBJECT | MOVE_DOWN;
+				//m_lMoveSphere1 = MOVE_OBJECT | MOVE_DOWN;
 				break;
 			case VK_2:
-				m_lMoveSphere2 = MOVE_OBJECT | MOVE_DOWN;
+				//m_lMoveSphere2 = MOVE_OBJECT | MOVE_DOWN;
 				break;
 			case VK_4:
-				m_lMoveSphere1 = MOVE_OBJECT | MOVE_UP;
+				//m_lMoveSphere1 = MOVE_OBJECT | MOVE_UP;
 				break;
 			case VK_5:
-				m_lMoveSphere2 = MOVE_OBJECT | MOVE_UP;
+				//m_lMoveSphere2 = MOVE_OBJECT | MOVE_UP;
 				break;
 			/*case VK_1:
 				g_bMoveSphere1 = true;
