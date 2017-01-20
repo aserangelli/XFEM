@@ -274,7 +274,7 @@ unsigned long CSOnGame::OnEvent(CEventBase * pEvent)
 			m_lIndicesFrame[2] = 2;
 
 			m_TetrahedralCube.CutTetrahedron(m_pDXPainter);
-
+			m_TetrahedralCube.IdentifyCutType();
 			// Draw
 			// Actualizar camara si fue movida
 			UpdateCamera();
