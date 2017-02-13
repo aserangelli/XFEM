@@ -267,12 +267,6 @@ unsigned long CSOnGame::OnEvent(CEventBase * pEvent)
 				1.0f,
 				0);
 
-			unsigned long   m_lIndicesFrame[6];
-
-			m_lIndicesFrame[0] = 0;
-			m_lIndicesFrame[1] = 1;
-			m_lIndicesFrame[2] = 2;
-
 			m_TetrahedralCube.CutTetrahedron(m_pDXPainter);
 			m_TetrahedralCube.IdentifyCutType();
 			// Draw

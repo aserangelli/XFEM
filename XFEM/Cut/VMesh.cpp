@@ -8,6 +8,9 @@
 #define TRESHOLD 0.02
 #define TRESHOLD2 0.1
 
+
+
+
 CVMesh::CVMesh()
 {
 }
@@ -243,7 +246,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			{
 				triangle[0].Position = V1;
 				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -265,7 +268,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				{
 					triangle2[0].Position = V1;
 					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[1] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -292,7 +295,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			{
 				triangle[0].Position = V1;
 				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -314,7 +317,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				{
 					triangle2[0].Position = V1;
 					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[3] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -332,7 +335,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			{
 				triangle[0].Position = V1;
 				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -340,7 +343,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			{
 				triangle[0].Position = V1;
 				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -362,7 +365,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				{
 					triangle2[0].Position = V1;
 					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[6] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -383,16 +386,16 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			if (abs(distanceNode1.x) < TRESHOLD && abs(distanceNode1.y) < TRESHOLD && abs(distanceNode1.z) < TRESHOLD)
 			{
 				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[1] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
 				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -413,8 +416,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					(m_TetrahedronFigures[i].intersectV1V3.z > minZ - TRESHOLD2 && m_TetrahedronFigures[i].intersectV1V3.z < maxZ + TRESHOLD2))
 				{
 					triangle2[0].Position = V1;
-					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[1].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[2] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -432,16 +435,16 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			if (abs(distanceNode1.x) < TRESHOLD && abs(distanceNode1.y) < TRESHOLD && abs(distanceNode1.z) < TRESHOLD)
 			{
 				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[1] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
 				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -462,8 +465,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					(m_TetrahedronFigures[i].intersectV1V4.z > minZ - TRESHOLD2 && m_TetrahedronFigures[i].intersectV1V4.z < maxZ + TRESHOLD2))
 				{
 					triangle2[0].Position = V1;
-					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[1].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[3] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -480,16 +483,16 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			if (abs(distanceNode1.x) < TRESHOLD && abs(distanceNode1.y) < TRESHOLD && abs(distanceNode1.z) < TRESHOLD)
 			{
 				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
 				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -508,10 +511,10 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				if ((m_TetrahedronFigures[i].intersectV3V4.x > minX - TRESHOLD2 && m_TetrahedronFigures[i].intersectV3V4.x < maxX + TRESHOLD2) &&
 					(m_TetrahedronFigures[i].intersectV3V4.y > minY - TRESHOLD2 && m_TetrahedronFigures[i].intersectV3V4.y < maxY + TRESHOLD2) &&
 					(m_TetrahedronFigures[i].intersectV3V4.z > minZ - TRESHOLD2 && m_TetrahedronFigures[i].intersectV3V4.z < maxZ + TRESHOLD2))
-				{
+				 {
 					triangle2[0].Position = V1;
-					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[1].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[5] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -528,17 +531,17 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			// Si esta dentro del treshold es un corte cerca del nodo, de lo contrario es un corte en un edge
 			if (abs(distanceNode1.x) < TRESHOLD && abs(distanceNode1.y) < TRESHOLD && abs(distanceNode1.z) < TRESHOLD)
 			{
-				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[0].Position = V2;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
-				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[0].Position = V2;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -558,9 +561,9 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					(m_TetrahedronFigures[i].intersectV2V3.y > minY - TRESHOLD2 && m_TetrahedronFigures[i].intersectV2V3.y < maxY + TRESHOLD2) &&
 					(m_TetrahedronFigures[i].intersectV2V3.z > minZ - TRESHOLD2 && m_TetrahedronFigures[i].intersectV2V3.z < maxZ + TRESHOLD2))
 				{
-					triangle2[0].Position = V1;
-					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[0].Position = V2;
+					triangle2[1].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[4] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -575,17 +578,17 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			// Si esta dentro del treshold es un corte cerca del nodo, de lo contrario es un corte en un edge
 			if (abs(distanceNode1.x) < TRESHOLD && abs(distanceNode1.y) < TRESHOLD && abs(distanceNode1.z) < TRESHOLD)
 			{
-				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[0].Position = V2;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
-				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[0].Position = V2;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -605,9 +608,9 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					(m_TetrahedronFigures[i].intersectV2V4.y > minY - TRESHOLD2 && m_TetrahedronFigures[i].intersectV2V4.y < maxY + TRESHOLD2) &&
 					(m_TetrahedronFigures[i].intersectV2V4.z > minZ - TRESHOLD2 && m_TetrahedronFigures[i].intersectV2V4.z < maxZ + TRESHOLD2))
 				{
-					triangle2[0].Position = V1;
-					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[0].Position = V2;
+					triangle2[1].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[6] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -622,17 +625,17 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 			// Si esta dentro del treshold es un corte cerca del nodo, de lo contrario es un corte en un edge
 			if (abs(distanceNode1.x) < TRESHOLD && abs(distanceNode1.y) < TRESHOLD && abs(distanceNode1.z) < TRESHOLD)
 			{
-				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[0].Position = V2;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
-				triangle[0].Position = V1;
-				triangle[1].Position = V2;
-				triangle[2].Position = V3;
+				triangle[0].Position = V2;
+				triangle[1].Position = V3;
+				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
 				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
@@ -652,9 +655,9 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					(m_TetrahedronFigures[i].intersectV3V4.y > minY - TRESHOLD2 && m_TetrahedronFigures[i].intersectV3V4.y < maxY + TRESHOLD2) &&
 					(m_TetrahedronFigures[i].intersectV3V4.z > minZ - TRESHOLD2 && m_TetrahedronFigures[i].intersectV3V4.z < maxZ + TRESHOLD2))
 				{
-					triangle2[0].Position = V1;
-					triangle2[1].Position = V2;
-					triangle2[2].Position = V3;
+					triangle2[0].Position = V2;
+					triangle2[1].Position = V3;
+					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[5] = true;
 					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
@@ -759,8 +762,8 @@ void CVMesh::LoadMSHFile()
 	{
 		VECTOR4D TexCoord = { 0,0,0,0 };
 		TexCoord.x = m_Vertices[j].Position.x;
-		TexCoord.y = m_Vertices[j].Position.z;
-		TexCoord.z = m_Vertices[j].Position.y;
+		TexCoord.y = m_Vertices[j].Position.y;
+		TexCoord.z = m_Vertices[j].Position.z;
 		TexCoord = Normalize(TexCoord);
 		TexCoord.x = TexCoord.x * 0.5 + 0.5;
 		TexCoord.y = TexCoord.y * 0.5 + 0.5;
@@ -774,6 +777,7 @@ void CVMesh::LoadMSHFile()
 
 void CVMesh::IdentifyCutType()
 {
+	int a = 0; int b = 0;  int x = 0; int  y = 0; int z = 0; int u = 0;
 
 	for (int i = 0; i < m_TetrahedronFigures.size(); i++)
 	{
@@ -795,13 +799,213 @@ void CVMesh::IdentifyCutType()
 				nEdges += 1;
 			}
 		}
+		m_cutType[nEdges][nNodes] == 'a' ? a++ : m_cutType[nEdges][nNodes] == 'b' ? b++ : m_cutType[nEdges][nNodes] == 'x' ? x++ :
+			m_cutType[nEdges][nNodes] == 'y' ? y++ : m_cutType[nEdges][nNodes] == 'z' ? z++ : m_cutType[nEdges][nNodes] == 'u' ? u++ : 1;
 
 		m_TetrahedronFigures[i].cutInfo.type_cut = m_cutType[nEdges][nNodes];
 		if (variable)
 		{
-			cout << "Tetrahedron No: " << i << " is type: " << m_TetrahedronFigures[i].cutInfo.type_cut << endl;
+			cout << "Tetrahedron No: " << i << " is type: " << (char)m_TetrahedronFigures[i].cutInfo.type_cut << endl;
 		}
 
 	}
+	if (variable)
+	{
+		cout << "Total type A tetrahedrons: " << a << endl;
+		cout << "Total type B tetrahedrons: " << b << endl;
+		cout << "Total type X tetrahedrons: " << x << endl;
+		cout << "Total type Y tetrahedrons: " << y << endl;
+		cout << "Total type Z tetrahedrons: " << z << endl;
+		cout << "Total type Undifined tetrahedrons: " << u << endl;
+	}
+
 	variable = false;
+}
+
+void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long int, TetrahedronFigure> m_TetrahedronFigures)
+{
+	m_IdsTetrahedronsToBeRemoved.push_back(nIdTetrahedronFiguresToRemove);
+	int vertexBase;
+	vector<VECTOR4D> vIndex;
+	vIndex.resize(3);
+
+	TetrahedronFigure above;
+	TetrahedronFigureDivision below;
+
+
+	// if bCutEdge[1] && bCutEdge[2] && bCutEdge[3] then V1 is a top
+	if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[1] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[2] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[3])
+	{
+		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v2 =totalNodes;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v3 = totalNodes;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v4 = totalNodes;
+
+		below.v2 = above.v2;
+		below.v3 = above.v3;
+
+		below.v1 = above.v4;
+
+		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
+		below.v5 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3;
+		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
+
+	}// Then V4 is a top
+	else if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[3] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[2] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[5])
+	{
+		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v2 = totalNodes;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v4 = totalNodes;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v3 = totalNodes;
+
+		below.v1 = above.v4;
+		below.v2 = above.v2;
+		below.v3 = above.v3;
+
+		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
+		below.v5 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3;
+		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
+
+	}// Then V2 is a top
+	else if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[1] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[4] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[6])
+	{
+		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v2 = totalNodes;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v3 = totalNodes;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v4 = totalNodes;
+
+
+		below.v1 = above.v4;
+		below.v2 = above.v2;
+		below.v3 = above.v3;
+
+
+
+		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3;
+		below.v5 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
+		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
+
+	}// Then V3 is a top
+	else if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[2] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[4] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[5])
+	{
+		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v2 = totalNodes;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v3 = totalNodes;
+
+		totalNodes++;
+		m_Vertices.resize(totalNodes + 1);
+		m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.x;
+		m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.y;
+		m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.z;
+		m_Vertices[totalNodes].Position.w = 1;
+		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+		above.v4 = totalNodes;
+
+
+		below.v1 = above.v4;
+		below.v2 = above.v2;
+		below.v3 = above.v3;
+
+		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
+		below.v5 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
+		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
+
+	}
+
 }

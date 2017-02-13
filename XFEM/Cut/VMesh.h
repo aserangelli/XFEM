@@ -53,6 +53,16 @@ struct TetrahedronFigure
 
 };
 
+struct TetrahedronFigureDivision
+{
+	long long int v1;
+	long long int v2;
+	long long int v3;
+	long long int v4;
+	long long int v5;
+	long long int v6;
+};
+
 
 
 class CVMesh :
@@ -63,6 +73,7 @@ private:
 	vector<unsigned long> m_IndicesTetrahedrosBuffer;
 	map<long long int, VECTOR4D> m_TetraVertexPos;
 	map<long long int, TetrahedronFigure> m_TetrahedronFigures;
+	map<long long int, TetrahedronFigureDivision> m_TetrahedronFiguresDivisions;
 	long long int totalNodes;
 	long long int totalTetrahedron;
 	char m_cutType[5][4] = {
@@ -72,6 +83,7 @@ private:
 		{'a','u','u','u'},
 		{'b','u','u','u'}
 	};
+	vector<int> m_IdsTetrahedronsToBeRemoved;
 
 public:
 	bool asd = true;
@@ -80,6 +92,7 @@ public:
 	bool variable = true;
 	void LoadMSHFile();
 	void IdentifyCutType();
+	void SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void CutTetrahedron(CDXBasicPainter* m_pDXPainter);
 	long long GetTotalEdges() { return m_EdgeInfo.size(); }
 	vector<CDXBasicPainter::VERTEX>& GetVertices() { return m_Vertices; }
