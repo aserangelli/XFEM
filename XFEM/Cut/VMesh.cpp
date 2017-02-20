@@ -24,6 +24,10 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 {
 	CDXBasicPainter::VERTEX plane[3];
 	unsigned long   m_lIndicesFrame[6];
+	/*plane[0].Position = { m_TetraVertexPos[10].x + 3.0f, m_TetraVertexPos[10].y + 3.1f, m_TetraVertexPos[10].z + 0.5f,1 };
+	plane[1].Position = { m_TetraVertexPos[1].x - 3.5f, m_TetraVertexPos[1].y + 3.8f, m_TetraVertexPos[1].z + 0.5f,1 };
+	plane[2].Position = { m_TetraVertexPos[2].x, m_TetraVertexPos[2].y - 5.1f, m_TetraVertexPos[2].z + 0.5f,1 };*/
+
 	plane[0].Position = { m_TetraVertexPos[10].x + 3.0f, m_TetraVertexPos[10].y + 3.1f, m_TetraVertexPos[10].z + 0.5f,1 };
 	plane[1].Position = { m_TetraVertexPos[1].x - 3.5f, m_TetraVertexPos[1].y + 3.8f, m_TetraVertexPos[1].z + 0.5f,1 };
 	plane[2].Position = { m_TetraVertexPos[2].x, m_TetraVertexPos[2].y - 5.1f, m_TetraVertexPos[2].z + 0.5f,1 };
@@ -40,7 +44,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 	m_lIndicesFrame[2] = 2;
 
 	m_pDXPainter->m_Params.Flags1 |= DRAW_JUST_WITH_COLOR;
-	m_pDXPainter->DrawIndexed(plane, 3, m_lIndicesFrame, 3, PAINTER_DRAW);
+	m_pDXPainter->DrawIndexed(plane, 3, m_lIndicesFrame, 3, PAINTER_DRAW_WIREFRAME);
 
 	CDXBasicPainter::VERTEX triangle[3];
 	triangle[0].Color = { 0,1,1,0 };
@@ -91,7 +95,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V3;
 				m_TetrahedronFigures[i].bCutNode[1] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if(m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			// Revizar si el corte esta cerca del Nodo V2
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
@@ -100,7 +105,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V3;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -122,13 +128,14 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V2;
 					triangle2[2].Position = V3;
 					m_TetrahedronFigures[i].bCutEdge[1] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 
 			}
 		}
 
-		else if ((RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V3, m_TetrahedronFigures[i].intersectV1V3)) &&
+		if ((RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V3, m_TetrahedronFigures[i].intersectV1V3)) &&
 				 (RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V2, m_TetrahedronFigures[i].intersectV1V2) ||
 				  RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V3, m_TetrahedronFigures[i].intersectV2V3)))
 		{
@@ -141,7 +148,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V3;
 				m_TetrahedronFigures[i].bCutNode[1] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -149,7 +157,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V3;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -171,13 +180,14 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V2;
 					triangle2[2].Position = V3;
 					m_TetrahedronFigures[i].bCutEdge[2] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 
 			}
 		}
 
-		else if ((RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V3, m_TetrahedronFigures[i].intersectV2V3)) &&
+		 if ((RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V3, m_TetrahedronFigures[i].intersectV2V3)) &&
 				 (RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V3, m_TetrahedronFigures[i].intersectV1V3) ||
 				  RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V2, m_TetrahedronFigures[i].intersectV1V2)))
 		{
@@ -190,7 +200,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V3;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -198,7 +209,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V3;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -220,7 +232,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V2;
 					triangle2[2].Position = V3;
 					m_TetrahedronFigures[i].bCutEdge[4] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 
 			}
@@ -240,7 +253,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[1] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -248,7 +262,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -270,13 +285,14 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V2;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[1] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 
 			}
 		}
 
-		else if ((RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V4, m_TetrahedronFigures[i].intersectV1V4)) &&
+		 if ((RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V4, m_TetrahedronFigures[i].intersectV1V4)) &&
 				 (RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V2, m_TetrahedronFigures[i].intersectV1V2) ||
 				  RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V4, m_TetrahedronFigures[i].intersectV2V4)))
 		{
@@ -289,7 +305,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[1] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -297,7 +314,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -319,12 +337,13 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V2;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[3] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 			}
 		}
 
-		else if ((RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V4, m_TetrahedronFigures[i].intersectV2V4)) &&
+		 if ((RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V4, m_TetrahedronFigures[i].intersectV2V4)) &&
 				 (RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V4, m_TetrahedronFigures[i].intersectV1V4) ||
 				  RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V2, m_TetrahedronFigures[i].intersectV1V2)))
 		{
@@ -337,7 +356,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -345,7 +365,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V2;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -367,7 +388,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V2;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[6] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 
 			}
@@ -389,7 +411,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[1] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -397,7 +420,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -419,13 +443,14 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V3;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[2] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 
 			}
 		}
 
-		else if ((RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V4, m_TetrahedronFigures[i].intersectV1V4)) &&
+		 if ((RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V4, m_TetrahedronFigures[i].intersectV1V4)) &&
 				 (RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V3, m_TetrahedronFigures[i].intersectV1V3) ||
 				  RayCastOnTriangle(pointA, pointB, pointC, V3, m_TetrahedronFigures[i].directionV3V4, m_TetrahedronFigures[i].intersectV3V4)))
 		{
@@ -438,7 +463,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[1] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -446,7 +472,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -468,12 +495,13 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V3;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[3] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 
 			}
 		}
-		else if ((RayCastOnTriangle(pointA, pointB, pointC, V3, m_TetrahedronFigures[i].directionV3V4, m_TetrahedronFigures[i].intersectV3V4)) &&
+		 if ((RayCastOnTriangle(pointA, pointB, pointC, V3, m_TetrahedronFigures[i].directionV3V4, m_TetrahedronFigures[i].intersectV3V4)) &&
 				 (RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V4, m_TetrahedronFigures[i].intersectV1V4) ||
 				  RayCastOnTriangle(pointA, pointB, pointC, V1, m_TetrahedronFigures[i].directionV1V3, m_TetrahedronFigures[i].intersectV1V3)))
 		{
@@ -486,7 +514,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -494,7 +523,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -516,7 +546,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V3;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[5] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 			}
 		}
@@ -535,7 +566,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -543,7 +575,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -565,11 +598,12 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V3;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[4] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 			}
 		}
-		else if ((RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V4, m_TetrahedronFigures[i].intersectV2V4)) &&
+		 if ((RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V4, m_TetrahedronFigures[i].intersectV2V4)) &&
 				 (RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V3, m_TetrahedronFigures[i].intersectV2V3) ||
 				  RayCastOnTriangle(pointA, pointB, pointC, V3, m_TetrahedronFigures[i].directionV3V4, m_TetrahedronFigures[i].intersectV3V4)))
 		{
@@ -582,7 +616,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[2] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -590,7 +625,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -612,11 +648,12 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V3;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[6] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 			}
 		}
-		else if ((RayCastOnTriangle(pointA, pointB, pointC, V3, m_TetrahedronFigures[i].directionV3V4, m_TetrahedronFigures[i].intersectV3V4)) &&
+		 if ((RayCastOnTriangle(pointA, pointB, pointC, V3, m_TetrahedronFigures[i].directionV3V4, m_TetrahedronFigures[i].intersectV3V4)) &&
 				 (RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V4, m_TetrahedronFigures[i].intersectV2V4) ||
 				  RayCastOnTriangle(pointA, pointB, pointC, V2, m_TetrahedronFigures[i].directionV2V3, m_TetrahedronFigures[i].intersectV2V3)))
 		{
@@ -629,7 +666,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[3] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else if (abs(distanceNode2.x) < TRESHOLD && abs(distanceNode2.y) < TRESHOLD && abs(distanceNode2.z) < TRESHOLD)
 			{
@@ -637,7 +675,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 				triangle[1].Position = V3;
 				triangle[2].Position = V4;
 				m_TetrahedronFigures[i].bCutNode[4] = true;
-				m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
+				if (m_debugPaint)
+					m_pDXPainter->DrawIndexed(triangle, 3, m_lIndicesF, 3, PAINTER_DRAW);
 			}
 			else
 			{
@@ -659,7 +698,8 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 					triangle2[1].Position = V3;
 					triangle2[2].Position = V4;
 					m_TetrahedronFigures[i].bCutEdge[5] = true;
-					m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
+					if (m_debugPaint)
+						m_pDXPainter->DrawIndexed(triangle2, 3, m_lIndicesF, 3, PAINTER_DRAW);
 				}
 			}
 		}
@@ -727,6 +767,7 @@ void CVMesh::LoadMSHFile()
 
 		}
 	}
+	//int aux = m_TetrahedronFigures.size();
 	tourus.close();
 
 	m_Indices.resize(m_IndicesTetrahedrosBuffer.size() * 3);
@@ -738,7 +779,6 @@ void CVMesh::LoadMSHFile()
 		v1 = m_IndicesTetrahedrosBuffer[i + 1];
 		v2 = m_IndicesTetrahedrosBuffer[i + 2];
 		v3 = m_IndicesTetrahedrosBuffer[i + 3];
-
 
 		m_Indices[j] = v0;
 		m_Indices[j + 1] = v2;
@@ -807,6 +847,11 @@ void CVMesh::IdentifyCutType()
 		{
 			cout << "Tetrahedron No: " << i << " is type: " << (char)m_TetrahedronFigures[i].cutInfo.type_cut << endl;
 		}
+		if ((char)m_TetrahedronFigures[i].cutInfo.type_cut == 'a' )
+		{
+			if(variable)
+				SplitElementTypeA(i, m_TetrahedronFigures);
+		}
 
 	}
 	if (variable)
@@ -820,25 +865,31 @@ void CVMesh::IdentifyCutType()
 	}
 
 	variable = false;
+
 }
 
 void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long int, TetrahedronFigure> m_TetrahedronFigures)
 {
+
 	m_IdsTetrahedronsToBeRemoved.push_back(nIdTetrahedronFiguresToRemove);
 	int vertexBase;
 	vector<VECTOR4D> vIndex;
 	vIndex.resize(3);
 
 	TetrahedronFigure above;
-	TetrahedronFigureDivision below;
+	TetrahedronFigureDivision below = {0,0,0,0,0,0};
 
+	int indexTetraBuffer = nIdTetrahedronFiguresToRemove * 4;
 
+	//totalTetrahedron += 1;
+	//m_IndicesTetrahedrosBuffer.resize((totalTetrahedron * 4));
 	// if bCutEdge[1] && bCutEdge[2] && bCutEdge[3] then V1 is a top
 	if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[1] &&
 		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[2] &&
 		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[3])
 	{
 		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
+		m_IndicesTetrahedrosBuffer[indexTetraBuffer -4] = totalNodes;
 
 		totalNodes++;
 		m_Vertices.resize(totalNodes + 1);
@@ -848,6 +899,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long 
 		m_Vertices[totalNodes].Position.w = 1;
 		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
 		above.v2 =totalNodes;
+		m_IndicesTetrahedrosBuffer[indexTetraBuffer - 3] = totalNodes;
 
 		totalNodes++;
 		m_Vertices.resize(totalNodes + 1);
@@ -857,6 +909,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long 
 		m_Vertices[totalNodes].Position.w = 1;
 		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
 		above.v3 = totalNodes;
+		m_IndicesTetrahedrosBuffer[indexTetraBuffer - 2] = totalNodes;
 
 		totalNodes++;
 		m_Vertices.resize(totalNodes + 1);
@@ -866,10 +919,10 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long 
 		m_Vertices[totalNodes].Position.w = 1;
 		m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
 		above.v4 = totalNodes;
+		m_IndicesTetrahedrosBuffer[indexTetraBuffer - 1] = totalNodes;
 
 		below.v2 = above.v2;
 		below.v3 = above.v3;
-
 		below.v1 = above.v4;
 
 		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
@@ -878,7 +931,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long 
 
 	}// Then V4 is a top
 	else if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[3] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[2] &&
+		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[6] &&
 		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[5])
 	{
 		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
@@ -1007,5 +1060,100 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long 
 		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
 
 	}
+
+	m_TetrahedronFigures._Insert_or_assign(nIdTetrahedronFiguresToRemove, above);
+	int position = m_TetrahedronFigures.size();
+	//position++;
+
+	TetrahedronFigure auxTetra1;
+	TetrahedronFigure auxTetra2;
+	TetrahedronFigure auxTetra3;
+
+
+	totalTetrahedron += 1;
+	m_IndicesTetrahedrosBuffer.resize((totalTetrahedron * 4));
+	auxTetra1.v1 = below.v1;
+	auxTetra1.v2 = below.v2;
+	auxTetra1.v3 = below.v3;
+	auxTetra1.v4 = below.v4;
+
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 4] = auxTetra1.v1;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 3] = auxTetra1.v2;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 2] = auxTetra1.v3;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 1] = auxTetra1.v4;
+	position++;
+	m_TetrahedronFigures._Insert_or_assign(position, auxTetra1);
+
+
+	totalTetrahedron += 1;
+	m_IndicesTetrahedrosBuffer.resize((totalTetrahedron * 4));
+	auxTetra2.v1 = below.v3;
+	auxTetra2.v2 = below.v4;
+	auxTetra2.v3 = below.v5;
+	auxTetra2.v4 = below.v6;
+
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 4] = auxTetra2.v1;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 3] = auxTetra2.v2;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 2] = auxTetra2.v3;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 1] = auxTetra2.v4;
+	position++;
+	m_TetrahedronFigures._Insert_or_assign(position, auxTetra2);
+
+	totalTetrahedron += 1;
+	m_IndicesTetrahedrosBuffer.resize((totalTetrahedron * 4));
+	auxTetra3.v1 = below.v1;
+	auxTetra3.v2 = below.v3;
+	auxTetra3.v3 = below.v4;
+	auxTetra3.v4 = below.v6;
+
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 4] = auxTetra3.v1;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 3] = auxTetra3.v2;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 2] = auxTetra3.v3;
+	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 1] = auxTetra3.v4;
+	position++;
+	m_TetrahedronFigures._Insert_or_assign(position, auxTetra3);
+
+	m_Indices.resize(m_IndicesTetrahedrosBuffer.size() * 3);
+
+	for (unsigned long int i = 0, j = 0; i < m_IndicesTetrahedrosBuffer.size(); i += 4, j += 12)
+	{
+		int v0, v1, v2, v3;
+		v0 = m_IndicesTetrahedrosBuffer[i];
+		v1 = m_IndicesTetrahedrosBuffer[i + 1];
+		v2 = m_IndicesTetrahedrosBuffer[i + 2];
+		v3 = m_IndicesTetrahedrosBuffer[i + 3];
+
+		m_Indices[j] = v0;
+		m_Indices[j + 1] = v2;
+		m_Indices[j + 2] = v1;
+
+		m_Indices[j + 3] = v2;
+		m_Indices[j + 4] = v3;
+		m_Indices[j + 5] = v1;
+
+		m_Indices[j + 6] = v3;
+		m_Indices[j + 7] = v0;
+		m_Indices[j + 8] = v1;
+
+		m_Indices[j + 9] = v0;
+		m_Indices[j + 10] = v3;
+		m_Indices[j + 11] = v2;
+	}
+
+
+	for (unsigned long j = 0; j < m_Vertices.size(); j++)
+	{
+		VECTOR4D TexCoord = { 0,0,0,0 };
+		TexCoord.x = m_Vertices[j].Position.x;
+		TexCoord.y = m_Vertices[j].Position.y;
+		TexCoord.z = m_Vertices[j].Position.z;
+		TexCoord = Normalize(TexCoord);
+		TexCoord.x = TexCoord.x * 0.5 + 0.5;
+		TexCoord.y = TexCoord.y * 0.5 + 0.5;
+
+		m_Vertices[j].TexCoord = TexCoord;
+	}
+
+	BuildTangentSpaceFromTexCoordsIndexed(true);
 
 }

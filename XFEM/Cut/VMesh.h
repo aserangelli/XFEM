@@ -84,6 +84,7 @@ private:
 		{'b','u','u','u'}
 	};
 	vector<int> m_IdsTetrahedronsToBeRemoved;
+	bool  m_debugPaint = false;
 
 public:
 	bool asd = true;
