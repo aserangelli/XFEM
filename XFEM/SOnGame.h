@@ -106,6 +106,7 @@ private:
 
 	/* Draw options */
 	unsigned long m_nFlagsPainter;
+	unsigned long m_nFlagsPainterPlane;
 
 protected:
 

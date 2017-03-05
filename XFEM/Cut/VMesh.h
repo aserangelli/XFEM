@@ -94,7 +94,7 @@ public:
 	void LoadMSHFile();
 	void IdentifyCutType();
 	void SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
-	void CutTetrahedron(CDXBasicPainter* m_pDXPainter);
+	void CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlagsPainter);
 	long long GetTotalEdges() { return m_EdgeInfo.size(); }
 	vector<CDXBasicPainter::VERTEX>& GetVertices() { return m_Vertices; }
 };

@@ -267,7 +267,7 @@ unsigned long CSOnGame::OnEvent(CEventBase * pEvent)
 				1.0f,
 				0);
 
-			m_TetrahedralCube.CutTetrahedron(m_pDXPainter);
+			m_TetrahedralCube.CutTetrahedron(m_pDXPainter, m_nFlagsPainterPlane);
 			m_TetrahedralCube.IdentifyCutType();
 			// Draw
 			// Actualizar camara si fue movida
@@ -323,6 +323,10 @@ unsigned long CSOnGame::OnEvent(CEventBase * pEvent)
 			{
 				m_nFlagsPainter ^= PAINTER_DRAW_WIREFRAME;
 				return 0;
+			}
+			if (pWin32->m_wParam == '8')
+			{
+				m_nFlagsPainterPlane ^= PAINTER_DRAW_WIREFRAME;
 			}
 			break;
 		case WM_TIMER:

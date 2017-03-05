@@ -20,7 +20,7 @@ CVMesh::~CVMesh()
 {
 }
 
-void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
+void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlagsPainter)
 {
 	CDXBasicPainter::VERTEX plane[3];
 	unsigned long   m_lIndicesFrame[6];
@@ -43,8 +43,9 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter)
 	m_lIndicesFrame[1] = 1;
 	m_lIndicesFrame[2] = 2;
 
+
 	m_pDXPainter->m_Params.Flags1 |= DRAW_JUST_WITH_COLOR;
-	m_pDXPainter->DrawIndexed(plane, 3, m_lIndicesFrame, 3, PAINTER_DRAW_WIREFRAME);
+	m_pDXPainter->DrawIndexed(plane, 3, m_lIndicesFrame, 3, m_nFlagsPainter); // PAINTER_DRAW_WIREFRAME
 
 	CDXBasicPainter::VERTEX triangle[3];
 	triangle[0].Color = { 0,1,1,0 };
@@ -889,7 +890,8 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long 
 		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[3])
 	{
 		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
-		m_IndicesTetrahedrosBuffer[indexTetraBuffer -4] = totalNodes;
+		// totaNodes es el total de nodos que existe en mi malla en un principio
+		m_IndicesTetrahedrosBuffer[indexTetraBuffer -4] = totalNodes-3;
 
 		totalNodes++;
 		m_Vertices.resize(totalNodes + 1);
@@ -1114,6 +1116,8 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long 
 	m_TetrahedronFigures._Insert_or_assign(position, auxTetra3);
 
 	m_Indices.resize(m_IndicesTetrahedrosBuffer.size() * 3);
+
+
 
 	for (unsigned long int i = 0, j = 0; i < m_IndicesTetrahedrosBuffer.size(); i += 4, j += 12)
 	{
