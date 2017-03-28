@@ -18,7 +18,7 @@
 
 #define SET_MAX_VEC4D {(float)INT_MAX,(float)INT_MAX,(float)INT_MAX,(float)INT_MAX}
 #define SET_MIN_VEC4D {(float)INT_MIN,(float)INT_MIN,(float)INT_MIN,(float)INT_MIN}
-
+#include<tuple>
 
 struct VECTOR4D
 {
@@ -34,6 +34,11 @@ struct VECTOR4D
 		};
 		float v[4];
 	};
+	bool operator<(const VECTOR4D& B) const
+	{
+		return std::tie(x, y, z) < std::tie(B.x, B.y, B.z);
+	}
+
 };
 
 struct MATRIX4D
@@ -58,6 +63,7 @@ MATRIX4D operator*(MATRIX4D& A, MATRIX4D &B);
 VECTOR4D operator*(VECTOR4D& A, float B);
 VECTOR4D operator*(float B, VECTOR4D& A);
 
+
 VECTOR4D operator*(MATRIX4D& A, VECTOR4D& V);
 VECTOR4D operator*(VECTOR4D& V, MATRIX4D& A);
 VECTOR4D operator*(VECTOR4D& A, VECTOR4D& B);
@@ -80,10 +86,10 @@ MATRIX4D Translation(float dx, float dy, float dz);
 MATRIX4D Scaling(float sx, float sy, float sz);
 MATRIX4D Orthogonalize(MATRIX4D &M);
 
-MATRIX4D View(VECTOR4D& EyePos, 
+MATRIX4D View(VECTOR4D& EyePos,
 	VECTOR4D& Target, VECTOR4D& Up);
 MATRIX4D PerspectiveWidthHeightRH(
-	float fWidth, float fHeight, 
+	float fWidth, float fHeight,
 	float zNear, float zFar);
 MATRIX4D PerspectiveWidthHeightLH(float fWidth, float fHeight, float zNear, float zFar);
 

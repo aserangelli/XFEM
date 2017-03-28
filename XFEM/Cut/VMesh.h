@@ -53,7 +53,7 @@ struct TetrahedronFigure
 
 };
 
-struct TetrahedronFigureDivision
+struct TetrahedronFigBaseA
 {
 	long long int v1;
 	long long int v2;
@@ -61,18 +61,6 @@ struct TetrahedronFigureDivision
 	long long int v4;
 	long long int v5;
 	long long int v6;
-};
-
-struct Vector4DCompare
-{
-	bool operator() (const VECTOR4D& lhs, const VECTOR4D& rhs) const
-	{
-		if (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z)
-		{
-			return true;
-		}
-		return false;
-	}
 };
 
 struct PointsOfControl
@@ -85,12 +73,12 @@ class CVMesh :
 	public CMesh
 {
 private:
-	vector<TetrahedronEdgeInfo> m_EdgeInfo;
+	//vector<TetrahedronEdgeInfo> m_EdgeInfo;
 	vector<unsigned long> m_IndicesTetrahedrosBuffer;
 	map<long long int, VECTOR4D> m_TetraVertexPos;
 	map<long long int, TetrahedronFigure> m_TetrahedronFigures;
-	map<long long int, TetrahedronFigureDivision> m_TetrahedronFiguresDivisions;
-	map<VECTOR4D, PointsOfControl, Vector4DCompare> m_NewNodesPointOfControl;
+	//map<long long int, TetrahedronFigBaseA> m_TetrahedronFiguresDivisions;
+	map<VECTOR4D, PointsOfControl> m_NewNodesPointOfControl;
 	long long int totalNodes;
 	long long int totalTetrahedron;
 	char m_cutType[5][4] = {
@@ -103,16 +91,21 @@ private:
 	vector<int> m_IdsTetrahedronsToBeRemoved;
 	bool  m_debugPaint = false;
 	bool FindNode(VECTOR4D position);
+	float displacement = 0.12;
+	bool flag = true;
+
+
+
 public:
-	bool asd = true;
 	CVMesh();
 	~CVMesh();
-	bool variable = true;
 	void LoadMSHFile();
-	void IdentifyCutType();
+	void IdentifyCutType(CDXBasicPainter* m_pDXPainter);
 	void SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlagsPainter);
-	long long GetTotalEdges() { return m_EdgeInfo.size(); }
+	//long long GetTotalEdges() { return m_EdgeInfo.size(); }
 	vector<CDXBasicPainter::VERTEX>& GetVertices() { return m_Vertices; }
+	void BuildTetrahedrons();
+	void AddIndexToBuffer(long long int v1, long long int v2, long long int v3, long long int v4);
 };
 
