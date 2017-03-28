@@ -2,7 +2,7 @@
 #include "..\Graphics\Mesh.h"
 #include <vector>
 #include <map>
-
+#include "Plane.h"
 using namespace std;
 
 struct TetrahedronEdgeInfo
@@ -93,6 +93,8 @@ private:
 	bool FindNode(VECTOR4D position);
 	float displacement = 0.12;
 	bool flag = true;
+	CDXBasicPainter::VERTEX plane[3];
+
 
 
 
@@ -107,5 +109,6 @@ public:
 	vector<CDXBasicPainter::VERTEX>& GetVertices() { return m_Vertices; }
 	void BuildTetrahedrons();
 	void AddIndexToBuffer(long long int v1, long long int v2, long long int v3, long long int v4);
+	void AddNewPointsOfControl(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFigBaseA& below, int offset, int indexTetraBuffer, int node, bool top);
 };
 

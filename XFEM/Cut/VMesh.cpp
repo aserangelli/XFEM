@@ -22,7 +22,7 @@ CVMesh::~CVMesh()
 
 void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlagsPainter)
 {
-	CDXBasicPainter::VERTEX plane[3];
+
 
 	/*plane[0].Position = { m_TetraVertexPos[10].x + 3.0f, m_TetraVertexPos[10].y + 3.1f, m_TetraVertexPos[10].z + 0.5f,1 };
 	plane[1].Position = { m_TetraVertexPos[1].x - 3.5f, m_TetraVertexPos[1].y + 3.8f, m_TetraVertexPos[1].z + 0.5f,1 };
@@ -31,6 +31,7 @@ void CVMesh::CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlag
 	plane[0].Position = { m_TetraVertexPos[10].x + 3.0f, m_TetraVertexPos[10].y + 3.1f, m_TetraVertexPos[10].z + 0.5f,1 };
 	plane[1].Position = { m_TetraVertexPos[1].x - 3.5f, m_TetraVertexPos[1].y + 3.8f, m_TetraVertexPos[1].z + 0.5f,1 };
 	plane[2].Position = { m_TetraVertexPos[2].x, m_TetraVertexPos[2].y - 5.1f, m_TetraVertexPos[2].z + 0.5f,1 };
+
 	VECTOR4D pointA, pointB, pointC;
 	pointA = plane[0].Position;
 	pointB = plane[1].Position;
@@ -828,666 +829,347 @@ void CVMesh::IdentifyCutType(CDXBasicPainter* m_pDXPainter)
 
 }
 
-void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long int, TetrahedronFigure> m_TetrahedronFigures)
+void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures)
 {
 	TetrahedronFigure above;
 	TetrahedronFigBaseA below = {0,0,0,0,0,0};
+	int indexTetraBuffer = nIdTetrahedronCut * 4;
 
-	int indexTetraBuffer = nIdTetrahedronFiguresToRemove * 4;
 	//totalTetrahedron += 1;
 	//m_IndicesTetrahedrosBuffer.resize((totalTetrahedron * 4));
-	// Si bCutEdge[1] && bCutEdge[2] && bCutEdge[3] entonces V1 esta arriba
+
 #pragma region V1 Arriba
-	if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[1] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[2] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[3])
+	if (m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[1] &&
+		m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[2] &&
+		m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[3])
 	{
 		// totalNodes es el total de nodos que existe en mi malla en un principio.
 		// de esta forma si le quitamos totalNodes - 3  llegamos al nodo de arriba
 		// El Nodo de arriba no se toca en este caso, ya que pasa de forma
 		// transparente para el nuevo nodo y no lo comparte con nadie mas.
 		bool nodeExist;
-		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
+		above.v1 = m_TetrahedronFigures[nIdTetrahedronCut].v1;
+		CPlane planeEquation = CPlane(plane[0].Position, plane[1].Position, plane[2].Position);
+		bool top = planeEquation.OnAboveOrBelow(m_Vertices[above.v1].Position);
 		//m_IndicesTetrahedrosBuffer[indexTetraBuffer -4] = totalNodes - 3; // <<<<<<<<<<<<----- CHECAR ESTO
 		// Se crea dos nuevos nodos, el de la parte de arriba y el de la parte
 		// de abajo. Por esta razon se hace totalNodes++ dos veces.
 		// Parte de Arriba
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V2//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2);
 		// No lo encontro
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v2 = totalNodes;
-			// Se sobrescribe lo que habia anteriormente en el indice - 3 por el nueva posicion
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 3] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-			// ABAJO
-			/**/
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v2 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 3, indexTetraBuffer, 2, top);
 		}
-		else {
+		else
+		{
 			// ARRIBA
-			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2].top;
+			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2].top;
 			// ABAJO
-			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2].bottom;
+			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2].bottom;
 		}
 
-		/**/
-
-
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V3//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v3 = totalNodes;
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 2] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-			// ABAJO
-			/**/
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v3 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 2, indexTetraBuffer, 3, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3].top;
+			above.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3].top;
 			// ABAJO
-			below.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3].bottom;
+			below.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3].bottom;
 		}
 
-		/**/
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V4//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v4 = totalNodes;
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 1] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-			// ABAJO
-			/**/
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v1 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 1, indexTetraBuffer, 1, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v4 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3].top;
+			above.v4 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3].top;
 			// ABAJO
-			below.v1 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3].bottom;
+			below.v1 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3].bottom;
 		}
 
 		// Se agrega un displacement a la base para que se vea como se divide
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2].Position.z -= displacement;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3].Position.z -= displacement;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4].Position.z -= displacement;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v2].Position.z -= top ? displacement : 0;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v3].Position.z -= top ? displacement : 0;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v4].Position.z -= top ? displacement : 0;
 
-		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
-		below.v5 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3;
-		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
+		below.v4 = m_TetrahedronFigures[nIdTetrahedronCut].v2;
+		below.v5 = m_TetrahedronFigures[nIdTetrahedronCut].v3;
+		below.v6 = m_TetrahedronFigures[nIdTetrahedronCut].v4;
 
 
 	}
 #pragma endregion
-	// Then V4 is a top
+
 #pragma region V4 arriba
-	else if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[3] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[6] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[5])
+	else if (m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[3] &&
+			 m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[6] &&
+		     m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[5])
 	{
 		bool nodeExist;
-		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
-
-		///////////////////////////////////////////////////////////////////////
+		above.v1 = m_TetrahedronFigures[nIdTetrahedronCut].v4;
+		CPlane planeEquation = CPlane(plane[0].Position, plane[1].Position, plane[2].Position);
+		bool top = planeEquation.OnAboveOrBelow(m_Vertices[above.v1].Position);
 		//////////////////////////Nodo V1//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v2 = totalNodes;
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 4] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v2 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 4, indexTetraBuffer, 2, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4].top;
+			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4].top;
 			// ABAJO
-			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V4].bottom;
+			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4].bottom;
 		}
 
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V2//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v4 = totalNodes;
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 3] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v1 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
-
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 3, indexTetraBuffer, 1, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v4 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4].top;
+			above.v4 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4].top;
 			// ABAJO
-			below.v1 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4].bottom;
+			below.v1 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4].bottom;
 		}
 
-
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V3//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v3 = totalNodes;
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 2] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v3 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 2, indexTetraBuffer, 3, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4].top;
+			above.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4].top;
 			// ABAJO
-			below.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4].bottom;
-
+			below.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4].bottom;
 		}
-
-
-		//below.v1 = above.v4;
-		//below.v2 = above.v2;
-		//below.v3 = above.v3;
 
 		// Se agrega un displacement a la base para que se vea como se divide
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1].Position.z -= displacement;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3].Position.z -= displacement;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2].Position.z -= displacement;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v1].Position.z -= top ? displacement : 0;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v3].Position.z -= top ? displacement : 0;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v2].Position.z -= top ? displacement : 0;
 
-		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
-		below.v5 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3;
-		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
-
+		below.v4 = m_TetrahedronFigures[nIdTetrahedronCut].v1;
+		below.v5 = m_TetrahedronFigures[nIdTetrahedronCut].v3;
+		below.v6 = m_TetrahedronFigures[nIdTetrahedronCut].v2;
 	}
 #pragma endregion
-	// Then V2 is a top
+
 #pragma region V2 arriba
-	else if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[1] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[4] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[6])
+	else if (m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[1] &&
+			 m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[4] &&
+			 m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[6])
 	{
 		bool nodeExist;
-		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
-
-		///////////////////////////////////////////////////////////////////////
+		above.v1 = m_TetrahedronFigures[nIdTetrahedronCut].v2;
+		CPlane planeEquation = CPlane(plane[0].Position, plane[1].Position, plane[2].Position);
+		bool top = planeEquation.OnAboveOrBelow(m_Vertices[above.v1].Position);
 		//////////////////////////Nodo V3//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v2 = totalNodes;
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 2] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v2 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 2, indexTetraBuffer, 2, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3].top;
+			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3].top;
 			// ABAJO
-			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3].bottom;
-
+			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3].bottom;
 		}
 
-
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V1//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v3 = totalNodes;
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 4] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v3 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 4, indexTetraBuffer, 3, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2].top;
+			above.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2].top;
 			// ABAJO
-			below.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V2].bottom;
+			below.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2].bottom;
 		}
 
-
-
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V4//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			above.v4 = totalNodes;
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 1] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4.z - displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v1 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 1, indexTetraBuffer, 1, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v4 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4].top;
+			above.v4 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4].top;
 			// ABAJO
-			below.v1 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V4].bottom;
+			below.v1 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4].bottom;
 		}
 
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1].Position.z -= displacement;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3].Position.z -= displacement;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4].Position.z -= displacement;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v1].Position.z -= top ? displacement : 0;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v3].Position.z -= top ? displacement : 0;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v4].Position.z -= top ? displacement : 0;
 
-		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3;
-		below.v5 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
-		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
+		below.v4 = m_TetrahedronFigures[nIdTetrahedronCut].v3;
+		below.v5 = m_TetrahedronFigures[nIdTetrahedronCut].v1;
+		below.v6 = m_TetrahedronFigures[nIdTetrahedronCut].v4;
 
 	}
 #pragma endregion
-	// Then V3 is a top
+
 #pragma region V3 Arriba
-	else if (m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[2] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[4] &&
-		m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].bCutEdge[5])
+	else if (m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[2] &&
+			 m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[4] &&
+			 m_TetrahedronFigures[nIdTetrahedronCut].bCutEdge[5])
 	{
 		// El Nodo de arriba no se toca en este caso, ya que pasa de forma
 		// transparente para el nuevo nodo y no lo comparte con nadie mas.
 		bool nodeExist;
-		above.v1 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v3;
-		///////////////////////////////////////////////////////////////////////
+		above.v1 = m_TetrahedronFigures[nIdTetrahedronCut].v3;
+		CPlane planeEquation = CPlane(plane[0].Position, plane[1].Position, plane[2].Position);
+		bool top = planeEquation.OnAboveOrBelow(m_Vertices[above.v1].Position);
 		//////////////////////////Nodo V1//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3);
 		if(!nodeExist)
 		{
-			//ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			//above.v2 = totalNodes;
-			above.v3 = totalNodes;
-			// Se sobrescribe lo que habia anteriormente en el indice - 2 por el nueva posicion
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 4] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3.z + displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v3 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 4, indexTetraBuffer, 3, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3].top;
+			above.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3].top;
 			// ABAJO
-			below.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV1V3].bottom;
+			below.v3 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3].bottom;
 		}
 
-
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V2//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			//above.v3 = totalNodes;
-			above.v4 = totalNodes;
-			// Se sobrescribe lo que habia anteriormente en el indice - 2 por el nueva posicion
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 3] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3.z + displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v1 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 3, indexTetraBuffer, 1, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v4 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3].top;
+			above.v4 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3].top;
 			// ABAJO
-			below.v1 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV2V3].bottom;
+			below.v1 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3].bottom;
 		}
 
-
-		///////////////////////////////////////////////////////////////////////
 		//////////////////////////Nodo V4//////////////////////////////////////
-		///////////////////////////////////////////////////////////////////////
-		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4);
+		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4);
 		if (!nodeExist)
 		{
-			// ARRIBA
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.z;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			//above.v4 = totalNodes;
-			above.v2 = totalNodes;
-			// Se sobrescribe lo que habia anteriormente en el indice - 2 por el nueva posicion
-			m_IndicesTetrahedrosBuffer[indexTetraBuffer - 1] = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			PointsOfControl newPoints;
-			newPoints.top = totalNodes;
-
-			// ABAJO
-			totalNodes++;
-			m_Vertices.resize(totalNodes + 1);
-			m_Vertices[totalNodes].Position.x = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.x;
-			m_Vertices[totalNodes].Position.y = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.y;
-			m_Vertices[totalNodes].Position.z = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4.z + displacement;
-			m_Vertices[totalNodes].Position.w = 1;
-			m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-			below.v2 = totalNodes;
-			// Guardamos el nuevo punto de control para futuras busquedas
-			// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-			newPoints.bottom = totalNodes;
-			m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 1, indexTetraBuffer, 2, top);
 		}
 		else
 		{
 			// ARRIBA
-			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4].top;
+			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4].top;
 			// ABAJO
-			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].intersectV3V4].bottom;
+			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4].bottom;
 
 		}
 
-		//below.v1 = above.v4;
-		//below.v2 = above.v2;
-		//below.v3 = above.v3;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1].Position.z += displacement;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2].Position.z += displacement;
-		m_Vertices[m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4].Position.z += displacement;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v1].Position.z -= top ? displacement : 0;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v2].Position.z -= top ? displacement : 0;
+		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v4].Position.z -= top ? displacement : 0;
 
-		below.v4 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v4;
-		below.v5 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v1;
-		below.v6 = m_TetrahedronFigures[nIdTetrahedronFiguresToRemove].v2;
+		below.v4 = m_TetrahedronFigures[nIdTetrahedronCut].v4;
+		below.v5 = m_TetrahedronFigures[nIdTetrahedronCut].v1;
+		below.v6 = m_TetrahedronFigures[nIdTetrahedronCut].v2;
 
 	}
 #pragma endregion
-	m_TetrahedronFigures._Insert_or_assign(nIdTetrahedronFiguresToRemove, above);
-
+	m_TetrahedronFigures._Insert_or_assign(nIdTetrahedronCut, above);
 	AddIndexToBuffer(below.v1, below.v2, below.v3, below.v4);
 	AddIndexToBuffer(below.v3, below.v4, below.v5, below.v6);
 	AddIndexToBuffer(below.v1, below.v3, below.v4, below.v6);
 
-
 	BuildTetrahedrons();
-
 }
 
 bool CVMesh::FindNode(VECTOR4D position)
 {
-	//int nodePosition = -1;
 	bool exist = false;
 	exist = m_NewNodesPointOfControl.count(position);
-	//long long int a = m_NewNodesPointOfControl[position].bottom;
-
 	return exist;
+}
+
+void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFigBaseA& below, int offset, int indexTetraBuffer, int node, bool top)
+{
+
+	// ARRIBA
+	totalNodes++;
+	m_Vertices.resize(totalNodes + 1);
+	m_Vertices[totalNodes].Position.x = intersectionPoint.x;
+	m_Vertices[totalNodes].Position.y = intersectionPoint.y;
+	m_Vertices[totalNodes].Position.z = intersectionPoint.z - ((top) ? 0 : displacement);
+	m_Vertices[totalNodes].Position.w = 1;
+	m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+	switch (node)
+	{
+	case 1:
+		above.v4 = totalNodes;
+		break;
+	case 2:
+		above.v2 = totalNodes;
+		break;
+	case 3:
+		above.v3 = totalNodes;
+		break;
+	}
+
+	// Se sobrescribe lo que habia anteriormente en el indice - offset por el nueva posicion
+	m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes;
+	// Guardamos el nuevo punto de control para futuras busquedas
+	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
+	PointsOfControl newPoints;
+	newPoints.top = totalNodes;
+
+	// ABAJO
+	totalNodes++;
+	m_Vertices.resize(totalNodes + 1);
+	m_Vertices[totalNodes].Position.x = intersectionPoint.x;
+	m_Vertices[totalNodes].Position.y = intersectionPoint.y;
+	m_Vertices[totalNodes].Position.z = intersectionPoint.z - ((top) ? displacement : 0);
+	m_Vertices[totalNodes].Position.w = 1;
+	m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+	switch (node)
+	{
+	case 1:
+		below.v1 = totalNodes;
+		break;
+	case 2:
+		below.v2 = totalNodes;
+		break;
+	case 3:
+		below.v3 = totalNodes;
+		break;
+	}
+	// Guardamos el nuevo punto de control para futuras busquedas
+	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
+	newPoints.bottom = totalNodes;
+	m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+
 }
 
 void CVMesh::AddIndexToBuffer(long long int v1, long long int v2, long long int v3, long long int v4)
