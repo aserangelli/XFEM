@@ -1470,55 +1470,11 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long 
 	}
 #pragma endregion
 	m_TetrahedronFigures._Insert_or_assign(nIdTetrahedronFiguresToRemove, above);
-	int position = m_TetrahedronFigures.size();
-	//position++;
 
-	TetrahedronFigure auxTetra1;
-	TetrahedronFigure auxTetra2;
-	TetrahedronFigure auxTetra3;
+	AddIndexToBuffer(below.v1, below.v2, below.v3, below.v4);
+	AddIndexToBuffer(below.v3, below.v4, below.v5, below.v6);
+	AddIndexToBuffer(below.v1, below.v3, below.v4, below.v6);
 
-	totalTetrahedron += 1;
-	m_IndicesTetrahedrosBuffer.resize((totalTetrahedron * 4));
-	auxTetra1.v1 = below.v1;
-	auxTetra1.v2 = below.v2;
-	auxTetra1.v3 = below.v3;
-	auxTetra1.v4 = below.v4;
-
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 4] = auxTetra1.v1;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 3] = auxTetra1.v2;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 2] = auxTetra1.v3;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 1] = auxTetra1.v4;
-	position++;
-	m_TetrahedronFigures._Insert_or_assign(position, auxTetra1);
-
-
-	totalTetrahedron += 1;
-	m_IndicesTetrahedrosBuffer.resize((totalTetrahedron * 4));
-	auxTetra2.v1 = below.v3;
-	auxTetra2.v2 = below.v4;
-	auxTetra2.v3 = below.v5;
-	auxTetra2.v4 = below.v6;
-
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 4] = auxTetra2.v1;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 3] = auxTetra2.v2;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 2] = auxTetra2.v3;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 1] = auxTetra2.v4;
-	position++;
-	m_TetrahedronFigures._Insert_or_assign(position, auxTetra2);
-
-	totalTetrahedron += 1;
-	m_IndicesTetrahedrosBuffer.resize((totalTetrahedron * 4));
-	auxTetra3.v1 = below.v1;
-	auxTetra3.v2 = below.v3;
-	auxTetra3.v3 = below.v4;
-	auxTetra3.v4 = below.v6;
-
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 4] = auxTetra3.v1;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 3] = auxTetra3.v2;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 2] = auxTetra3.v3;
-	m_IndicesTetrahedrosBuffer[m_IndicesTetrahedrosBuffer.size() - 1] = auxTetra3.v4;
-	position++;
-	m_TetrahedronFigures._Insert_or_assign(position, auxTetra3);
 
 	BuildTetrahedrons();
 
