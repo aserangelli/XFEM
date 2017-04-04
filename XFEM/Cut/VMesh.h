@@ -53,7 +53,16 @@ struct TetrahedronFigure
 
 };
 
-struct TetrahedronFigBaseA
+struct TetrahedronFig5V
+{
+	long long int v1;
+	long long int v2;
+	long long int v3;
+	long long int v4;
+	long long int v5;
+};
+
+struct TetrahedronFig6V
 {
 	long long int v1;
 	long long int v2;
@@ -103,12 +112,15 @@ public:
 	~CVMesh();
 	void LoadMSHFile();
 	void IdentifyCutType(CDXBasicPainter* m_pDXPainter);
-	void SplitElementTypeA(int nIdTetrahedronFiguresToRemove, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
+	void SplitElementTypeA(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
+	void SplitElementTypeB(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlagsPainter);
 	//long long GetTotalEdges() { return m_EdgeInfo.size(); }
 	vector<CDXBasicPainter::VERTEX>& GetVertices() { return m_Vertices; }
 	void BuildTetrahedrons();
 	void AddIndexToBuffer(long long int v1, long long int v2, long long int v3, long long int v4);
-	void AddNewPointsOfControl(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFigBaseA& below, int offset, int indexTetraBuffer, int node, bool top);
+	void AddNewPointsOfControl(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFig6V& below, int offset, int indexTetraBuffer, int node, bool top);
+	void AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V& above, TetrahedronFig6V& below, int node, bool top);
+
 };
 

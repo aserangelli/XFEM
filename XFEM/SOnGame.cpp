@@ -447,7 +447,11 @@ void CSOnGame::UpdateCamera()
 	}
 
 	m_pDXPainter->m_Params.lights[1].Position = EyePos;
-	m_pDXPainter->m_Params.lights[1].Direction = ZDir;
+	m_pDXPainter->m_Params.lights[1].Direction = {ZDir.x, ZDir.y, ZDir.z, ZDir.w};
+	m_pDXPainter->m_Params.lights[2].Position = {0,0,0,EyePos.w};
+	m_pDXPainter->m_Params.lights[2].Direction = { ZDir.x, ZDir.y, ZDir.z, ZDir.w };
+	m_pDXPainter->m_Params.lights[3].Position = { 0,0,-1,EyePos.w };
+	m_pDXPainter->m_Params.lights[3].Direction = { ZDir.x, ZDir.y, ZDir.z, ZDir.w };
 
 	// Set camara pos in params
 	m_pDXPainter->m_Params.CameraPosition = EyePos;

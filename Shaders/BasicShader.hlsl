@@ -48,7 +48,7 @@ struct MATERIAL
 // Flags
 #define LIGHT_ON 0x01
 // Types
-#define LIGHT_DIRECTIONAL 0 
+#define LIGHT_DIRECTIONAL 0
 #define LIGHT_POINT 1
 #define LIGHT_SPOT 2
 
@@ -120,7 +120,7 @@ VERTEX_OUTPUT VSMain(VERTEX_INPUT Input)
 
     Output.LightPosition = mul(Input.Position, mul(mul(World, LightView), LightProjection)  );
 
-    // Sky env 
+    // Sky env
     float4 worldPosition = mul(Input.Position, World);
     float4 incident = normalize(worldPosition - CameraPosition);
     float4 normal = normalize(mul(float4(Input.Normal), World));
@@ -132,8 +132,8 @@ VERTEX_OUTPUT VSMain(VERTEX_INPUT Input)
         float4 viewDirection = CameraPosition - worldPosition;
         Output.FogAmount = saturate((length(viewDirection) - /*fogStart*/10.0f) / (20.0f /*fogRange*/));
     }
-        
-     
+
+
     return Output;
 
 }
@@ -199,17 +199,17 @@ float4 PSMain(VERTEX_OUTPUT Input) :SV_Target
     }
 
     float Shadowed = 1;
-    
+
     if(Flags.x & MAPPING_SHADOW)
     {
-        // 1. Calcular la coordenada de textura a partir de la posicion 
+        // 1. Calcular la coordenada de textura a partir de la posicion
         //    interpolada en espacio de luz
         float4 ShadowPos = Input.LightPosition / Input.LightPosition.w;
         ShadowPos.xy = (ShadowPos.xy * float2(0.5, -0.5)) + 0.5;
 
-        if(saturate(ShadowPos.x) == ShadowPos.x && 
+        if(saturate(ShadowPos.x) == ShadowPos.x &&
            saturate(ShadowPos.y) == ShadowPos.y)
-        {   
+        {
             float depth = ShadowMap.Sample(Sampler, ShadowPos.xy).r;
 
             if((ShadowPos.z - depth) > 0.001)
@@ -218,7 +218,7 @@ float4 PSMain(VERTEX_OUTPUT Input) :SV_Target
             }
         }
     }
-    
+
     for (int i = 0; i < 8; i++)
     {
         if (lights[i].FlagsAndType.x & LIGHT_ON)
@@ -228,7 +228,7 @@ float4 PSMain(VERTEX_OUTPUT Input) :SV_Target
                 case LIGHT_DIRECTIONAL:
                     {
                         float ILambert = max(0, -dot(N, lights[i].Direction));
-                        
+
                         ColorDiffuse += ILambert * lights[i].Diffuse * Shadowed;
 
                         // Tarea : Calcular la componente specular de la luz direccional
@@ -238,14 +238,14 @@ float4 PSMain(VERTEX_OUTPUT Input) :SV_Target
 
                         float IPhong = pow(max(0, dot(H, N)), Material.Power.x);
                         ColorSpecular += IPhong * lights[i].Specular * Shadowed;
-                        
+
                     }
                     break;
 
                 // Hacer estos casos de tarea
                 case LIGHT_POINT:
                     // L direccion de la luz
-                    // N Normal del vertice 
+                    // N Normal del vertice
                     // Q es la posicion del vertice
                     // P Posicion de la luz
                     {
@@ -265,11 +265,11 @@ float4 PSMain(VERTEX_OUTPUT Input) :SV_Target
                     break;
                 case LIGHT_SPOT:
                     // L direccion de la luz
-                    // N Normal del vertice 
+                    // N Normal del vertice
                     // Q es la posicion del vertice
                     // P Posicion de la luz
                     {
-                        
+
                         float d = length(Input.PositionNonProjected - lights[i].Position);
                         float4 L = normalize(Input.PositionNonProjected - lights[i].Position);
 
@@ -294,12 +294,12 @@ float4 PSMain(VERTEX_OUTPUT Input) :SV_Target
 
     if (Flags.x & MAPPING_DIFFUSE)
         ColorDiffuse *= Diffuse.Sample(Sampler, Input.TexCoord.xy);
-    
+
     ColorOutput  = Material.Emissive +
-           ColorDiffuse  * Material.Diffuse  + 
+           ColorDiffuse  * Material.Diffuse  +
            ColorSpecular * Material.Specular +
            ColorEnviomental * Material.Ambient+
-           ColorEmissive + 
+           ColorEmissive +
 		   Input.Color +
            Brightness;
 
