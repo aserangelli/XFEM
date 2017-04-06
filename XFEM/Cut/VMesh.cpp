@@ -833,7 +833,64 @@ void CVMesh::IdentifyCutType(CDXBasicPainter* m_pDXPainter)
 	flag = false;
 
 }
+/*
+void CVMesh::SplitElementTypeX(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures)
 
+{
+	TetrahedronFig5V below = { 0,0,0,0,0 };
+	TetrahedronFigure above = { 0,0,0,0 };
+
+	CPlane planeEquation = CPlane(plane[0].Position, plane[1].Position, plane[2].Position);
+
+
+	// V2 Cut
+	if (m_TetrahedronFigures[nIdTetrahedronCut].bCutNode[2])
+	{
+		bool bV1 = planeEquation.OnAboveOrBelow(m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v1].Position);
+		bool bV3 = planeEquation.OnAboveOrBelow(m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v3].Position);
+		bool bV4 = planeEquation.OnAboveOrBelow(m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v4].Position);
+		if (bV1)
+		{
+			above.v1 = m_TetrahedronFigures[nIdTetrahedronCut].v1;
+			above.v2 = m_TetrahedronFigures[nIdTetrahedronCut].v2;
+			above.v3 = m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3;
+			above.v4 = m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4;
+
+
+			below.v1 = m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3;
+			below.v2 = m_TetrahedronFigures[nIdTetrahedronCut].v2; // Este tiene que ser un nuevo punto agregado
+			below.v3 = m_TetrahedronFigures[nIdTetrahedronCut].v3; // Este tiene que ser un nuevo punto agregado
+			below.v4 = m_TetrahedronFigures[nIdTetrahedronCut].v4; // Este tiene que ser un nuevo punto agregado
+			below.v5 = m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4;
+		}
+		else if (bV3)
+		{
+
+		}
+		else if (bV4)
+		{
+
+		}
+
+	}
+	// V3 Cut
+	else if (m_TetrahedronFigures[nIdTetrahedronCut].bCutNode[3])
+	{
+
+	}
+	// V4 Cut
+	else if (m_TetrahedronFigures[nIdTetrahedronCut].bCutNode[4])
+	{
+
+	}
+	// V1 Cut
+	else if (m_TetrahedronFigures[nIdTetrahedronCut].bCutNode[1])
+	{
+
+	}
+
+}
+*/
 void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures)
 {
 	TetrahedronFig6V above = { 0,0,0,0,0,0 };
@@ -859,7 +916,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 1, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 11, top);
 		}
 		else
 		{
@@ -870,7 +927,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 2, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 12, top);
 		}
 		else
 		{
@@ -881,7 +938,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 3, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 13, top);
 		}
 		else
 		{
@@ -892,7 +949,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 4, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 14, top);
 		}
 		else
 		{
@@ -925,7 +982,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 1, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 11, top);
 		}
 		else
 		{
@@ -936,7 +993,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 2, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 12, top);
 		}
 		else
 		{
@@ -946,7 +1003,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 3, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 13, top);
 		}
 		else
 		{
@@ -956,7 +1013,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 4, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 14, top);
 		}
 		else
 		{
@@ -986,7 +1043,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 1, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 11, top);
 		}
 		else
 		{
@@ -997,7 +1054,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 2, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 12, top);
 		}
 		else
 		{
@@ -1008,7 +1065,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 3, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 13, top);
 		}
 		else
 		{
@@ -1019,7 +1076,7 @@ void CVMesh::SplitElementTypeB(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControlB(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 4, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 14, top);
 		}
 		else
 		{
@@ -1075,7 +1132,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		// No lo encontro
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 3, indexTetraBuffer, 2, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 2, top, 3, indexTetraBuffer);
 		}
 		else
 		{
@@ -1089,7 +1146,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 2, indexTetraBuffer, 3, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 3, top, 2, indexTetraBuffer);
 		}
 		else
 		{
@@ -1103,7 +1160,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 1, indexTetraBuffer, 1, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 1, top, 1, indexTetraBuffer);
 		}
 		else
 		{
@@ -1139,7 +1196,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 4, indexTetraBuffer, 2, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V4, above, below, 2, top, 4, indexTetraBuffer);
 		}
 		else
 		{
@@ -1153,7 +1210,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 3, indexTetraBuffer, 1, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 1, top, 3, indexTetraBuffer);
 		}
 		else
 		{
@@ -1167,7 +1224,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 2, indexTetraBuffer, 3, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 3, top, 2, indexTetraBuffer);
 		}
 		else
 		{
@@ -1201,7 +1258,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 2, indexTetraBuffer, 2, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 2, top, 2, indexTetraBuffer);
 		}
 		else
 		{
@@ -1215,7 +1272,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 4, indexTetraBuffer, 3, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V2, above, below, 3, top, 4, indexTetraBuffer);
 		}
 		else
 		{
@@ -1229,7 +1286,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 1, indexTetraBuffer, 1, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V4, above, below, 1, top, 1, indexTetraBuffer);
 		}
 		else
 		{
@@ -1265,7 +1322,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3);
 		if(!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 4, indexTetraBuffer, 3, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV1V3, above, below, 3, top, 4, indexTetraBuffer);
 		}
 		else
 		{
@@ -1279,7 +1336,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 3, indexTetraBuffer, 1, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV2V3, above, below, 1, top, 3, indexTetraBuffer);
 		}
 		else
 		{
@@ -1293,7 +1350,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 		nodeExist = FindNode(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4);
 		if (!nodeExist)
 		{
-			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 1, indexTetraBuffer, 2, top);
+			AddNewPointsOfControl(m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4, above, below, 2, top, 1, indexTetraBuffer);
 		}
 		else
 		{
@@ -1301,7 +1358,6 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 			above.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4].top;
 			// ABAJO
 			below.v2 = m_NewNodesPointOfControl[m_TetrahedronFigures[nIdTetrahedronCut].intersectV3V4].bottom;
-
 		}
 
 		m_Vertices[m_TetrahedronFigures[nIdTetrahedronCut].v1].Position.z -= top ? displacement : 0;
@@ -1315,6 +1371,7 @@ void CVMesh::SplitElementTypeA(int nIdTetrahedronCut, map<long long int, Tetrahe
 	}
 #pragma endregion
 	m_TetrahedronFigures._Insert_or_assign(nIdTetrahedronCut, above);
+
 	AddIndexToBuffer(below.v1, below.v2, below.v3, below.v4);
 	AddIndexToBuffer(below.v3, below.v4, below.v5, below.v6);
 	AddIndexToBuffer(below.v1, below.v3, below.v4, below.v6);
@@ -1329,62 +1386,25 @@ bool CVMesh::FindNode(VECTOR4D position)
 	return exist;
 }
 
-void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFig6V& below, int offset, int indexTetraBuffer, int node, bool top)
+void CVMesh::AddNewPointsOfControlA(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFig6V& below, int offset, int indexTetraBuffer, int node, bool top)
 {
-
 	// ARRIBA
-	totalNodes++;
-	m_Vertices.resize(totalNodes + 1);
-	m_Vertices[totalNodes].Position.x = intersectionPoint.x;
-	m_Vertices[totalNodes].Position.y = intersectionPoint.y;
-	m_Vertices[totalNodes].Position.z = intersectionPoint.z - ((top) ? 0 : displacement);
-	m_Vertices[totalNodes].Position.w = 1;
-	m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-	switch (node)
-	{
-	case 1:
-		above.v4 = totalNodes;
-		break;
-	case 2:
-		above.v2 = totalNodes;
-		break;
-	case 3:
-		above.v3 = totalNodes;
-		break;
-	}
-
+	AddVertexToBuffer(intersectionPoint, top);
+	node == 1 ? above.v4 = totalNodes : node == 2 ? above.v2 = totalNodes : node == 3 ? above.v3 = totalNodes : totalNodes;
 	// Se sobrescribe lo que habia anteriormente en el indice - offset por el nueva posicion
 	m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes;
 	// Guardamos el nuevo punto de control para futuras busquedas
 	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
 	PointsOfControl newPoints;
 	newPoints.top = totalNodes;
-
 	// ABAJO
-	totalNodes++;
-	m_Vertices.resize(totalNodes + 1);
-	m_Vertices[totalNodes].Position.x = intersectionPoint.x;
-	m_Vertices[totalNodes].Position.y = intersectionPoint.y;
-	m_Vertices[totalNodes].Position.z = intersectionPoint.z - ((top) ? displacement : 0);
-	m_Vertices[totalNodes].Position.w = 1;
-	m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
-	switch (node)
-	{
-	case 1:
-		below.v1 = totalNodes;
-		break;
-	case 2:
-		below.v2 = totalNodes;
-		break;
-	case 3:
-		below.v3 = totalNodes;
-		break;
-	}
+	AddVertexToBuffer(intersectionPoint, !top);
+	node == 1 ? below.v1 = totalNodes : node == 2 ? below.v2 = totalNodes : node == 3 ? below.v3 = totalNodes : totalNodes;
+
 	// Guardamos el nuevo punto de control para futuras busquedas
 	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
 	newPoints.bottom = totalNodes;
 	m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
-
 }
 
 void CVMesh::AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V& above, TetrahedronFig6V& below, int node, bool top)
@@ -1400,16 +1420,16 @@ void CVMesh::AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V
 	m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
 	switch (node)
 	{
-	case 1:
+	case 11:
 		above.v2 = totalNodes;
 		break;
-	case 2:
+	case 12:
 		above.v3 = totalNodes;
 		break;
-	case 3:
+	case 13:
 		above.v4 = totalNodes;
 		break;
-	case 4:
+	case 14:
 		above.v5 = totalNodes;
 		break;
 	}
@@ -1431,16 +1451,16 @@ void CVMesh::AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V
 	m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
 	switch (node)
 	{
-	case 1:
+	case 11:
 		below.v1 = totalNodes;
 		break;
-	case 2:
+	case 12:
 		below.v4 = totalNodes;
 		break;
-	case 3:
+	case 13:
 		below.v6 = totalNodes;
 		break;
-	case 4:
+	case 14:
 		below.v5 = totalNodes;
 		break;
 	}
@@ -1451,6 +1471,16 @@ void CVMesh::AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V
 
 }
 
+void CVMesh::AddVertexToBuffer(VECTOR4D intersectionPoint, bool top)
+{
+	totalNodes++;
+	m_Vertices.resize(totalNodes + 1);
+	m_Vertices[totalNodes].Position.x = intersectionPoint.x;
+	m_Vertices[totalNodes].Position.y = intersectionPoint.y;
+	m_Vertices[totalNodes].Position.z = intersectionPoint.z - ((top) ? 0 : displacement);
+	m_Vertices[totalNodes].Position.w = 1;
+	m_TetraVertexPos._Insert_or_assign(totalNodes, m_Vertices[totalNodes].Position);
+}
 
 void CVMesh::AddIndexToBuffer(long long int v1, long long int v2, long long int v3, long long int v4)
 {
