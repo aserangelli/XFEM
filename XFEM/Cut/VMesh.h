@@ -63,6 +63,7 @@ struct TetrahedronFig5V
 	long long int v3;
 	long long int v4;
 	long long int v5;
+	long long int v6;
 };
 
 struct TetrahedronFig6V
@@ -135,12 +136,15 @@ inline void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove & a
 	// ARRIBA
 	AddVertexToBuffer(intersectionPoint, top);
 	node == 1 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
-	node == 2 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
-	node == 3 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
-	node == 11 ? above.v2 = totalNodes :
-	node == 12 ? above.v3 = totalNodes :
-	node == 13 ? above.v4 = totalNodes :
-	node == 14 ? above.v5 = totalNodes : totalNodes;
+		node == 2 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 3 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 11 ? above.v2 = totalNodes :
+		node == 12 ? above.v3 = totalNodes :
+		node == 13 ? above.v4 = totalNodes :
+		node == 14 ? above.v5 = totalNodes :
+		node == 21 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 22 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 23 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes : totalNodes;
 
 	// Se sobrescribe lo que habia anteriormente en el indice - offset por el nueva posicion
 	//m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes;
@@ -150,14 +154,16 @@ inline void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove & a
 	newPoints.top = totalNodes;
 	// ABAJO
 	AddVertexToBuffer(intersectionPoint, !top);
-	node == 1  ? below.v1 = totalNodes :
-	node == 2  ? below.v2 = totalNodes :
-	node == 3  ? below.v3 = totalNodes :
-	node == 11 ? below.v1 = totalNodes :
-	node == 12 ? below.v4 = totalNodes :
-	node == 13 ? below.v6 = totalNodes :
-	node == 14 ? below.v5 = totalNodes :
-
+	node == 1 ? below.v1 = totalNodes :
+		node == 2 ? below.v2 = totalNodes :
+		node == 3 ? below.v3 = totalNodes :
+		node == 11 ? below.v1 = totalNodes :
+		node == 12 ? below.v4 = totalNodes :
+		node == 13 ? below.v6 = totalNodes :
+		node == 14 ? below.v5 = totalNodes :
+		node == 21 ? below.v1 = totalNodes :
+		node == 22 ? below.v5 = totalNodes :
+		node == 23 ? below.v4 = totalNodes : totalNodes;
 	// Guardamos el nuevo punto de control para futuras busquedas
 	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
 	newPoints.bottom = totalNodes;
