@@ -125,8 +125,10 @@ public:
 	template<typename TAbove, typename TBelow>
 	void AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove& above, TBelow& below, int node, bool top, int offset = 0, int indexTetraBuffer = 0);
 
-	void AddNewPointsOfControlA(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFig6V& below, int offset, int indexTetraBuffer, int node, bool top);
+	void AddNewPointsOfControlA(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFig6V& below, int node, bool top, int offset, int indexTetraBuffer);
 	void AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V& above, TetrahedronFig6V& below, int node, bool top);
+
+	void SetUpSavedPointsOfControl(VECTOR4D intersectionPoint, long long int& above, long long int& below);
 
 };
 
@@ -169,3 +171,5 @@ inline void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove & a
 	newPoints.bottom = totalNodes;
 	m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
 }
+
+
