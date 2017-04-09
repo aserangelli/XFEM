@@ -128,7 +128,7 @@ public:
 	void AddNewPointsOfControlA(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFig6V& below, int node, bool top, int offset, int indexTetraBuffer);
 	void AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V& above, TetrahedronFig6V& below, int node, bool top);
 
-	void SetUpSavedPointsOfControl(VECTOR4D intersectionPoint, long long int& above, long long int& below);
+	void SetUpSavedPointsOfControl(VECTOR4D intersectionPoint, long long int& above, long long int& below, bool top);
 
 };
 
@@ -148,12 +148,7 @@ inline void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove & a
 		node == 22 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
 		node == 23 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes : totalNodes;
 
-	// Se sobrescribe lo que habia anteriormente en el indice - offset por el nueva posicion
-	//m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes;
-	// Guardamos el nuevo punto de control para futuras busquedas
-	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-	PointsOfControl newPoints;
-	newPoints.top = totalNodes;
+
 	// ABAJO
 	AddVertexToBuffer(intersectionPoint, !top);
 	node == 1 ? below.v1 = totalNodes :
@@ -168,8 +163,25 @@ inline void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove & a
 		node == 23 ? below.v4 = totalNodes : totalNodes;
 	// Guardamos el nuevo punto de control para futuras busquedas
 	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
-	newPoints.bottom = totalNodes;
-	m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+	// Se sobrescribe lo que habia anteriormente en el indice - offset por el nueva posicion
+	//m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes;
+	// Guardamos el nuevo punto de control para futuras busquedas
+	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
+	PointsOfControl newPoints;
+	if (top)
+	{
+		newPoints.top = totalNodes - 1;
+		newPoints.bottom = totalNodes;
+		m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
+	}
+	else
+	{
+		newPoints.top = totalNodes;
+		newPoints.bottom = totalNodes-1;
+		m_NewNodesPointOfControl[m_Vertices[totalNodes-1].Position] = newPoints;
+	}
+
+	//m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
 }
 
 
