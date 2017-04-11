@@ -116,6 +116,7 @@ public:
 	void SplitElementTypeA(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void SplitElementTypeB(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void SplitElementTypeX(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
+	void SplitElementTypeY(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlagsPainter);
 	//long long GetTotalEdges() { return m_EdgeInfo.size(); }
 	vector<CDXBasicPainter::VERTEX>& GetVertices() { return m_Vertices; }
@@ -127,40 +128,57 @@ public:
 
 	void AddNewPointsOfControlA(VECTOR4D intersectionPoint, TetrahedronFigure& above, TetrahedronFig6V& below, int node, bool top, int offset, int indexTetraBuffer);
 	void AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V& above, TetrahedronFig6V& below, int node, bool top);
-	void AnalizeCutX(VECTOR4D intersectionA, VECTOR4D intersectionB, VECTOR4D intersectionNode, int v1, int v2, int v3, TetrahedronFigure& above, TetrahedronFig5V& below, bool top, int indexTetraBuffer);
+	//void AnalizeCutX(VECTOR4D intersectionA, VECTOR4D intersectionB, VECTOR4D intersectionNode, int v1, int v2, int v3, TetrahedronFigure& above, TetrahedronFig5V& below, bool top, int indexTetraBuffer, int node = 0);
+	void AnalizeCutY(VECTOR4D intersectionA, VECTOR4D intersectionNodeA, VECTOR4D intersectionNodeB, int v1, int v2, int v3, TetrahedronFigure& above, TetrahedronFigure& below, bool top, int indexTetraBuffer);
+
 	void SetUpSavedPointsOfControl(VECTOR4D intersectionPoint, long long int& above, long long int& below, bool top);
 
+	template<typename TAbove, typename TBelow>
+	void SetUpSavedPointsOfControl(VECTOR4D intersectionPoint, TAbove& above, TBelow& below, int node, bool top);
+
+	template<typename TAbove, typename TBelow>
+	void AnalizeCut(VECTOR4D intersectionA, VECTOR4D intersectionB, VECTOR4D intersectionNode, int v1, int v2, int v3, TAbove & above, TBelow & below, bool top, int indexTetraBuffer, int node);
+
 };
+
+
+
 
 template<typename TAbove, typename TBelow>
 inline void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove & above, TBelow & below, int node, bool top, int offset, int indexTetraBuffer)
 {
 	// ARRIBA
 	AddVertexToBuffer(intersectionPoint, top);
-	node == 1 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
-		node == 2 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
-		node == 3 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+	node == 1 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 2 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 3 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
 		node == 11 ? above.v2 = totalNodes :
 		node == 12 ? above.v3 = totalNodes :
 		node == 13 ? above.v4 = totalNodes :
 		node == 14 ? above.v5 = totalNodes :
 		node == 21 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
 		node == 22 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
-		node == 23 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes : totalNodes;
+		node == 23 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 31 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 32 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		node == 33 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes : totalNodes;
 
 
 	// ABAJO
 	AddVertexToBuffer(intersectionPoint, !top);
-	node == 1 ? below.v1 = totalNodes :
-		node == 2 ? below.v2 = totalNodes :
-		node == 3 ? below.v3 = totalNodes :
+	node == 1 ? below.v2 = totalNodes :
+		node == 2 ? below.v3 = totalNodes :
+		node == 3 ? below.v1 = totalNodes :
 		node == 11 ? below.v1 = totalNodes :
 		node == 12 ? below.v4 = totalNodes :
 		node == 13 ? below.v6 = totalNodes :
 		node == 14 ? below.v5 = totalNodes :
 		node == 21 ? below.v1 = totalNodes :
 		node == 22 ? below.v5 = totalNodes :
-		node == 23 ? below.v4 = totalNodes : totalNodes;
+		node == 23 ? below.v4 = totalNodes :
+		node == 31 ? below.v1 = totalNodes :
+		node == 32 ? below.v2 = totalNodes :
+		node == 33 ? below.v3 = totalNodes : totalNodes;
 	// Guardamos el nuevo punto de control para futuras busquedas
 	// IMPORTANTE totalNode es el de arriba y totalNode+1 el de abajo
 	// Se sobrescribe lo que habia anteriormente en el indice - offset por el nueva posicion
@@ -184,4 +202,66 @@ inline void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove & a
 	//m_NewNodesPointOfControl[m_Vertices[totalNodes].Position] = newPoints;
 }
 
+template<typename TAbove, typename TBelow>
+inline void CVMesh::SetUpSavedPointsOfControl(VECTOR4D intersectionPoint, TAbove & above, TBelow & below, int node, bool top)
+{
+	switch (node)
+	{
+	case 21:
+		top == true ? above.v2 = m_NewNodesPointOfControl[intersectionPoint].top : above.v2 = m_NewNodesPointOfControl[intersectionPoint].bottom;
+		top == true ? below.v1 = m_NewNodesPointOfControl[intersectionPoint].bottom : below.v1 = m_NewNodesPointOfControl[intersectionPoint].top;
+		break;
+
+	case 22:
+		top == true ? above.v3 = m_NewNodesPointOfControl[intersectionPoint].top : above.v3 = m_NewNodesPointOfControl[intersectionPoint].bottom;
+		top == true ? below.v5 = m_NewNodesPointOfControl[intersectionPoint].bottom : below.v5 = m_NewNodesPointOfControl[intersectionPoint].top;
+		break;
+
+	case 23:
+		top == true ? above.v4 = m_NewNodesPointOfControl[intersectionPoint].top : above.v4 = m_NewNodesPointOfControl[intersectionPoint].bottom;
+		top == true ? below.v4 = m_NewNodesPointOfControl[intersectionPoint].bottom : below.v4 = m_NewNodesPointOfControl[intersectionPoint].top;
+		break;
+
+	case 31:
+		top == true ? above.v4 = m_NewNodesPointOfControl[intersectionPoint].top : above.v4 = m_NewNodesPointOfControl[intersectionPoint].bottom;
+		top == true ? below.v1 = m_NewNodesPointOfControl[intersectionPoint].bottom : below.v1 = m_NewNodesPointOfControl[intersectionPoint].top;
+		break;
+
+	case 32:
+		top == true ? above.v2 = m_NewNodesPointOfControl[intersectionPoint].top : above.v2 = m_NewNodesPointOfControl[intersectionPoint].bottom;
+		top == true ? below.v2 = m_NewNodesPointOfControl[intersectionPoint].bottom : below.v2 = m_NewNodesPointOfControl[intersectionPoint].top;
+		break;
+
+	case 33:
+		top == true ? above.v3 = m_NewNodesPointOfControl[intersectionPoint].top : above.v3 = m_NewNodesPointOfControl[intersectionPoint].bottom;
+		top == true ? below.v3 = m_NewNodesPointOfControl[intersectionPoint].bottom : below.v3 = m_NewNodesPointOfControl[intersectionPoint].top;
+		break;
+	}
+}
+
+template<typename TAbove, typename TBelow>
+inline void CVMesh::AnalizeCut(VECTOR4D intersectionA, VECTOR4D intersectionB, VECTOR4D intersectionC, int v1, int v2, int v3, TAbove & above, TBelow & below, bool top, int indexTetraBuffer, int node)
+{
+	bool nodeExist;
+	nodeExist = FindNode(intersectionA);
+	// No lo encontro
+	if (!nodeExist)
+		AddNewPointsOfControl(intersectionA, above, below, node, top, v1, indexTetraBuffer);
+	else
+		SetUpSavedPointsOfControl(intersectionA, above, below, node, top);
+
+	nodeExist = FindNode(intersectionB);
+	// No lo encontro
+	if (!nodeExist)
+		AddNewPointsOfControl(intersectionB, above, below, node + 1, top, v2, indexTetraBuffer);
+	else
+		SetUpSavedPointsOfControl(intersectionB, above, below, node + 1, top);
+
+	nodeExist = FindNode(intersectionC);
+	// No lo encontro
+	if (!nodeExist)
+		AddNewPointsOfControl(intersectionC, above, below, node + 2, top, v3, indexTetraBuffer);
+	else
+		SetUpSavedPointsOfControl(intersectionC, above, below, node + 2, top);
+}
 
