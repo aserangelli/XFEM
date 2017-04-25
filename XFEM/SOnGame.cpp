@@ -50,6 +50,7 @@ void CSOnGame::OnEntry(void)
 
 	/* Load surface */
 	m_TetrahedralCube.LoadMSHFile();
+	m_Plane.LoadPlane();
 
 	/* Load Scene */
 	char buffer[BUF_SIZE];
@@ -195,6 +196,10 @@ void CSOnGame::OnEntry(void)
 	m_bForward =  m_bBackward = m_bTurnLeft = m_bTurnRight =
 	m_bTurnUp =  m_bTurnDown = m_bTurnS =  m_bTurnS1 =false;
 
+	m_bPlaneLeft = m_bPlaneRight =
+	m_bPlaneUp = m_bPlaneDown =
+	m_bPlaneRotateL = m_bPlaneRotateR = false;
+
 
 
 }
@@ -267,8 +272,8 @@ unsigned long CSOnGame::OnEvent(CEventBase * pEvent)
 				1.0f,
 				0);
 
-			m_TetrahedralCube.CutTetrahedron(m_pDXPainter, m_nFlagsPainterPlane);
-			m_TetrahedralCube.IdentifyCutType(m_pDXPainter);
+			//m_TetrahedralCube.CutTetrahedron(m_pDXPainter, m_nFlagsPainterPlane);
+			//m_TetrahedralCube.IdentifyCutType(m_pDXPainter);
 			// Draw
 			// Actualizar camara si fue movida
 			UpdateCamera();
@@ -307,7 +312,8 @@ unsigned long CSOnGame::OnEvent(CEventBase * pEvent)
 
 			/* Draw surface */
 			m_pDXPainter->DrawIndexed(&m_TetrahedralCube.m_Vertices[0], m_TetrahedralCube.m_Vertices.size(), &m_TetrahedralCube.m_Indices[0], m_TetrahedralCube.m_Indices.size(), m_nFlagsPainter);
-
+			m_pDXManager->GetContext()->PSSetShaderResources(0, 1, &m_pSRVNormalMapTrue);
+			m_pDXPainter->DrawIndexed(&m_Plane.m_Vertices[0], m_Plane.m_Vertices.size(), &m_Plane.m_Indices[0], m_Plane.m_Indices.size(), m_nFlagsPainterPlane);
 			m_pDXManager->GetSwapChain()->Present(1, 0);
 
 		}
@@ -408,7 +414,7 @@ void CSOnGame::UpdateCamera()
 	O.m13 = 0;
 	O.m23 = 0;
 
-	VECTOR4D Speed = { 0.1, 0.1, 0.1, 0 };
+	VECTOR4D Speed = { 0.08, 0.08, 0.08, 0 };
 	bool movePos = false;
 	if (m_bBackward)
 	{
@@ -455,7 +461,7 @@ void CSOnGame::UpdateCamera()
 
 	// Set camara pos in params
 	m_pDXPainter->m_Params.CameraPosition = EyePos;
-	float speed = .02;
+	float speed = .01;
 
 	if (m_bTurnLeft)
 	{
@@ -487,6 +493,30 @@ void CSOnGame::UpdateCamera()
 		MATRIX4D R = RotationAxis(-speed, ZDir);
 		O = O*R;
 	}
+	if (m_bPlaneDown)
+	{
+		m_Plane.ApplyTransformation(Translation(0, 0, (-1)*0.1));
+	}
+	if (m_bPlaneUp)
+	{
+		m_Plane.ApplyTransformation(Translation(0, 0, (1)*0.1));
+	}
+	if (m_bPlaneLeft)
+	{
+		m_Plane.ApplyTransformation(Translation((-1)*0.1, 0, 0));
+	}
+	if (m_bPlaneRight)
+	{
+		m_Plane.ApplyTransformation(Translation((1)*0.1, 0, 0));
+	}
+	if (m_bPlaneRotateL)
+	{
+		m_Plane.ApplyRotation(0.1f);
+	}
+	if (m_bPlaneRotateR)
+	{
+		m_Plane.ApplyRotation(-0.1f);
+	}
 
 	InvV = O;
 
@@ -508,6 +538,13 @@ void CSOnGame::UpdateCamera()
 #define VK_I 0x49
 #define VK_U 0x55
 #define VK_O 0x4F
+#define VK_D 0x44
+#define VK_E 0x45
+#define VK_S 0x53
+#define VK_F 0x46
+#define VK_W 0x57
+#define VK_R 0x52
+#define VK_C 0x43
 #define VK_1 97
 #define VK_2 98
 #define VK_3 99
@@ -557,6 +594,24 @@ void CSOnGame::ManageKeyboardEvents(UINT event, WPARAM wParam)
 				break;
 			case VK_O:
 				m_bTurnS1 = false;
+				break;
+			case VK_D:
+				m_bPlaneDown = false;
+				break;
+			case VK_E:
+				m_bPlaneUp = false;
+				break;
+			case VK_S:
+				m_bPlaneLeft = false;
+				break;
+			case VK_F:
+				m_bPlaneRight = false;
+				break;
+			case VK_W:
+				m_bPlaneRotateL = false;
+				break;
+			case VK_R:
+				m_bPlaneRotateR = false;
 				break;
 			case VK_1:
 			case VK_4:
@@ -617,6 +672,28 @@ void CSOnGame::ManageKeyboardEvents(UINT event, WPARAM wParam)
 				break;
 			case VK_O:
 				m_bTurnS1 = true;
+				break;
+			case VK_D:
+				m_bPlaneDown = true;
+				break;
+			case VK_E:
+				m_bPlaneUp = true;
+				break;
+			case VK_S:
+				m_bPlaneLeft = true;
+				break;
+			case VK_F:
+				m_bPlaneRight = true;
+				break;
+			case VK_W:
+				m_bPlaneRotateL = true;
+				break;
+			case VK_R:
+				m_bPlaneRotateR = true;
+				break;
+			case VK_C:
+				m_TetrahedralCube.CutTetrahedron(m_pDXPainter, m_nFlagsPainterPlane, m_Plane);
+				m_TetrahedralCube.IdentifyCutType(m_pDXPainter);
 				break;
 			case VK_1:
 				//m_lMoveSphere1 = MOVE_OBJECT | MOVE_DOWN;

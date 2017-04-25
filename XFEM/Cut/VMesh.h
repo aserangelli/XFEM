@@ -92,6 +92,7 @@ private:
 	map<long long int, TetrahedronFigure> m_TetrahedronFigures;
 	//map<long long int, TetrahedronFigBaseA> m_TetrahedronFiguresDivisions;
 	map<VECTOR4D, PointsOfControl> m_NewNodesPointOfControl;
+	map<long long int, bool> m_VertexAlreadyMoved;
 	long long int totalNodes;
 	long long int totalTetrahedron;
 	char m_cutType[5][4] = {
@@ -104,20 +105,24 @@ private:
 	vector<int> m_IdsTetrahedronsToBeRemoved;
 	bool  m_debugPaint = false;
 	bool FindNode(VECTOR4D position);
-	float displacement = 0.12;
+	float displacement = 0.12; //0.12
 	bool flag = true;
-	CDXBasicPainter::VERTEX plane[3];
+
 
 public:
+	CDXBasicPainter::VERTEX plane[3];
 	CVMesh();
 	~CVMesh();
 	void LoadMSHFile();
+	void UpdatePlane();
+	void LoadPlane();
 	void IdentifyCutType(CDXBasicPainter* m_pDXPainter);
 	void SplitElementTypeA(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void SplitElementTypeB(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void SplitElementTypeX(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
 	void SplitElementTypeY(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
-	void CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlagsPainter);
+	void SplitElementTypeZ(int nIdTetrahedronCut, map<long long int, TetrahedronFigure> m_TetrahedronFigures);
+	void CutTetrahedron(CDXBasicPainter* m_pDXPainter, unsigned long m_nFlagsPainter, CVMesh m_plane);
 	//long long GetTotalEdges() { return m_EdgeInfo.size(); }
 	vector<CDXBasicPainter::VERTEX>& GetVertices() { return m_Vertices; }
 	void BuildTetrahedrons();
@@ -130,7 +135,8 @@ public:
 	void AddNewPointsOfControlB(VECTOR4D intersectionPoint, TetrahedronFig6V& above, TetrahedronFig6V& below, int node, bool top);
 	//void AnalizeCutX(VECTOR4D intersectionA, VECTOR4D intersectionB, VECTOR4D intersectionNode, int v1, int v2, int v3, TetrahedronFigure& above, TetrahedronFig5V& below, bool top, int indexTetraBuffer, int node = 0);
 	void AnalizeCutY(VECTOR4D intersectionA, VECTOR4D intersectionNodeA, VECTOR4D intersectionNodeB, int v1, int v2, int v3, TetrahedronFigure& above, TetrahedronFigure& below, bool top, int indexTetraBuffer);
-
+	void DisplaceTopVertex(bool top, const long long int v1);
+	void DisplaceBottomVertexes(bool top, long long int v1, long long int v2, long long int v3);
 	void SetUpSavedPointsOfControl(VECTOR4D intersectionPoint, long long int& above, long long int& below, bool top);
 
 	template<typename TAbove, typename TBelow>
@@ -159,6 +165,7 @@ inline void CVMesh::AddNewPointsOfControl(VECTOR4D intersectionPoint, TAbove & a
 		node == 21 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
 		node == 22 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
 		node == 23 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
+		//node == 23 ? above.v4 = m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] :
 		node == 31 ? above.v4 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
 		node == 32 ? above.v2 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes :
 		node == 33 ? above.v3 = totalNodes, m_IndicesTetrahedrosBuffer[indexTetraBuffer - offset] = totalNodes : totalNodes;
@@ -263,5 +270,7 @@ inline void CVMesh::AnalizeCut(VECTOR4D intersectionA, VECTOR4D intersectionB, V
 		AddNewPointsOfControl(intersectionC, above, below, node + 2, top, v3, indexTetraBuffer);
 	else
 		SetUpSavedPointsOfControl(intersectionC, above, below, node + 2, top);
+
+
 }
 

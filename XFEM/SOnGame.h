@@ -69,6 +69,8 @@ public:
 	/* Scene */
 	CVMesh m_TetrahedralCube;
 
+	CVMesh m_Plane;
+
 
 	bool flag = true;
 
@@ -104,6 +106,10 @@ private:
 	bool m_bTurnUp , m_bTurnDown ;
 	bool m_bTurnS , m_bTurnS1 ;
 
+	/*Plane Options*/
+	bool m_bPlaneLeft, m_bPlaneRight;
+	bool m_bPlaneUp, m_bPlaneDown;
+	bool m_bPlaneRotateL, m_bPlaneRotateR;
 	/* Draw options */
 	unsigned long m_nFlagsPainter;
 	unsigned long m_nFlagsPainterPlane;

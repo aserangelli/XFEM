@@ -353,3 +353,19 @@ void CMesh::GenerarCentroides()
 
 	}
 }
+
+void CMesh::ApplyTransformation(MATRIX4D & m)
+{
+	for (unsigned int i = 0; i < m_Vertices.size(); i++)
+	{
+		m_Vertices[i].Position = m_Vertices[i].Position * m;
+	}
+}
+
+void CMesh::ApplyRotation(float theta)
+{
+	for (unsigned int i = 0; i < m_Vertices.size(); i++)
+	{
+		m_Vertices[i].Position = m_Vertices[i].Position * RotationX(theta);
+	}
+}

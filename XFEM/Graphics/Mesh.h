@@ -50,7 +50,8 @@ public:
 	void Optimize();
 	void GenerarCentroides();
 	vector<centroid>& getCentroides() { return m_Centroides; }
-
+	void ApplyTransformation(MATRIX4D & m);
+	void ApplyRotation(float theta);
 
 	~CMesh();
 };
